@@ -14,9 +14,6 @@ contract Bank {
         balances[msg.sender]=0;
     }
 
-    //Hello gf
-
-
     function getOwnBalance() public view returns (uint256) {
         return balances[msg.sender];
     }
