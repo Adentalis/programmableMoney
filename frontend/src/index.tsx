@@ -1,17 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { createGlobalStyle } from "styled-components";
+
+import App from "./App";
+import { globalStyle } from "./styles";
+const GlobalStyle = createGlobalStyle`
+  ${globalStyle}
+`;
+
+// @ts-ignore
+declare global {
+  // tslint:disable-next-line
+  interface Window {
+    web3: any;
+    ethereum: any;
+    Web3Modal: any;
+    Box: any;
+    box: any;
+    space: any;
+  }
+}
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
+    <GlobalStyle />
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </>,
+  document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
