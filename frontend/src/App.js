@@ -8,6 +8,7 @@ import { NavigationBar } from './component/NavigationBar';
 import { Home } from './Home';
 import { About } from './About';
 import { NoMatch } from './NoMatch';
+import { FileTab } from './component/FileTab';
 
 
 
@@ -26,11 +27,16 @@ function App() {
           <Route component={NoMatch} />
         </Switch>
       </Router>
+      <FileTab>
+        
+      </FileTab>
+
      
   
 
 
     </React.Fragment>
+    
     
   );
 }
