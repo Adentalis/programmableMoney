@@ -1,6 +1,7 @@
 import React from 'react';
-import { Nav, Navbar, Form, FormControl } from 'react-bootstrap';
 import styled from 'styled-components';
+import { Nav, Navbar } from 'react-bootstrap';
+import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH } from '../constants';
 
 const Style = styled.div`
   .navbar { 
@@ -32,9 +33,9 @@ export const NavigationBar = () => (
       <Navbar.Toggle aria-controls="basic-navbar-nav"/>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Item><Nav.Link href="/message">Nachrichten</Nav.Link></Nav.Item> 
-          <Nav.Item><Nav.Link href="/send">Geld senden</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link href="/freeze">Geld einfrieren</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link href={"/" + NAVIGATION_MESSAGE_PATH}>Nachrichten</Nav.Link></Nav.Item> 
+          <Nav.Item><Nav.Link href={"/" + NAVIGATION_SEND_PATH}>Geld senden</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link href={"/" + NAVIGATION_FREEZE_PATH}>Geld einfrieren</Nav.Link></Nav.Item>
         </Nav>
           <Nav className="ml-auto">
           <Nav.Item>Hier Steht deine Adresse</Nav.Item>
