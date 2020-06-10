@@ -1,18 +1,8 @@
-.backgroundColor{
-  background-color: #483d8b;
-  
-  
-  
-}
-
-.alignment{
-  
+/*.alignment{
   display: grid;
   grid-template-columns: repeat(2, auto);
-
 }
-
-
+*/
 .App {
   text-align: center;
   

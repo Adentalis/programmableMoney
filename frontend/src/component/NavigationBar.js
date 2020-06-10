@@ -2,9 +2,14 @@ import React from 'react';
 import { Nav, Navbar, Form, FormControl } from 'react-bootstrap';
 import styled from 'styled-components';
 
-const Styles = styled.div`
-  .navbar { background-color: #4B0082; }
-  a, .navbar-nav, .navbar-light .nav-link {
+const Style = styled.div`
+  .navbar { 
+    background-color: #4B0082; 
+  }
+  a, 
+  .navbar-nav, 
+  .navbar-light 
+  .nav-link {
     color: #E6E6FA;
     &:hover { color: white; }
   }
@@ -21,22 +26,20 @@ const Styles = styled.div`
   `;
 
 export const NavigationBar = () => (
-  <Styles>
+  <Style>
     <Navbar expand="lg">
-      
       <Navbar.Brand href="/">Tutorial</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-      
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Item><Nav.Link href="/">Nachrichten</Nav.Link></Nav.Item> 
-          <Nav.Item><Nav.Link href="/about">Geld senden</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link href="/about">Geld einfrieren</Nav.Link></Nav.Item>
-          </Nav>
+          <Nav.Item><Nav.Link href="/message">Nachrichten</Nav.Link></Nav.Item> 
+          <Nav.Item><Nav.Link href="/send">Geld senden</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link href="/freeze">Geld einfrieren</Nav.Link></Nav.Item>
+        </Nav>
           <Nav className="ml-auto">
-          <Nav.Item><Nav.Link href="/about">abmelden</Nav.Link></Nav.Item>
+          <Nav.Item>Hier Steht deine Adresse</Nav.Item>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
-  </Styles>
+  </Style>
 )
