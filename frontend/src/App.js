@@ -9,8 +9,7 @@ import styled from 'styled-components';
 
 const Body = styled.div`
   display: grid;
-  grid-template-columns: auto 40%;
-  grid-template-rows: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(496px, 1fr));
   background-color: #483d8b;
   position: fixed;
   width: 100%;
@@ -18,18 +17,10 @@ const Body = styled.div`
 `;
 
 const Left = styled.div`
-  grid-column-start:1; 
-  grid-column-end:1; 
-  grid-row-start:1; 
-  grid-row-end:1; 
   padding: 30px;
 `;
 
 const Right = styled.div`
-  grid-column-start:2; 
-  grid-column-end:2; 
-  grid-row-start:1; 
-  grid-row-end:1; 
   padding: 30px;
 `;
 
