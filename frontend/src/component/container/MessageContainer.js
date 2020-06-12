@@ -14,13 +14,12 @@ export const MessageContainer = () => (
     <StyledContainer>
         <h1 style={{color: '#E6E6FA'}}>{NAVIGATION_MESSAGE_TEXT}</h1>
         <Tabs>
-            <div label="Überweisung senden"></div>
-            <div label="Termin">
+            <div label="Posteingang"style={{color: '#E6E6FA'}}></div>
+            <div label="Postausgang">
             After 'while, <em>Termin</em>!
             </div>
-            <div label="Dauerauftrag ">
-            Nothing to see here, this tab is <em>extinct</em>!
-            </div>
+            <div label="Neu">
+           </div>
         </Tabs>
     </StyledContainer>
 )

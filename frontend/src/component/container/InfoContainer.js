@@ -17,10 +17,6 @@ export const InfoContainer = () => (
         <br></br> 
         <br></br> 
         <br></br> 
-        <h1 style={{color: '#E6E6FA',}}>Name:</h1>  
-        <br></br>
-        <br></br> 
-        <br></br> 
         <br></br> 
         <br></br> 
         <h1 style={{color: '#E6E6FA',}}>Betrag:</h1>  
