@@ -13,10 +13,13 @@ const StyledContainer = styled(Container)`
 export const FreezeContainer = () => (
     <StyledContainer>
         <h1 style={{color: '#E6E6FA'}}>{NAVIGATION_FREEZE_TEXT}</h1>
-        <Tabs>
+        {/* <Tabs>
             <div label="Überweisung senden" >></div>
             <div label="Termin">After 'while, <em>Termin</em>! </div>
             <div label="Dauerauftrag ">Nothing to see here, this tab is <em>extinct</em>!</div>
-        </Tabs>
+        </Tabs> */}
+        
+        
     </StyledContainer>
+    
 )
