@@ -4,6 +4,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { NavigationBar } from './component/NavigationBar';
 import { SendContainer, MessageContainer, FreezeContainer, InfoContainer } from './component';
+import {SendContainer } from './component/container/SendContainer';
 import styled from 'styled-components';
 
 
