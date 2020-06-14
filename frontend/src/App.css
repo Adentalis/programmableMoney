@@ -1,5 +1,11 @@
+/*.alignment{
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+}
+*/
 .App {
   text-align: center;
+  
 }
 
 .App-logo {
@@ -35,4 +41,5 @@
   to {
     transform: rotate(360deg);
   }
+  
 }
