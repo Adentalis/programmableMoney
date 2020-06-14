@@ -18,6 +18,13 @@ contract Bank {
         msg.sender.transfer(balances[msg.sender]);
         balances[msg.sender]=0;
     }
+    
+    //@author Daniel Niemczyk
+    function sendMoney(uint _amount, address _address) public {
+        require(balances[msg.sender] > _amount);
+        balances[msg.sender] -= _amount;
+        balances[_address] += _amount;
+    }
 
     //@author Daniel Niemczyk
     function freezeMoney(uint _timeToFreeze) public {
@@ -54,5 +61,5 @@ contract Bank {
     function getMessage(address _address) public view returns (string memory) {
         return messages[_address];
     }
-    
+
 }
