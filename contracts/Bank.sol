@@ -1,4 +1,4 @@
-pragma solidity 0.6.0;
+pragma solidity >=0.4.21 <0.7.0;
 
 contract Bank {
     mapping(address => uint256) balances;
@@ -17,6 +17,13 @@ contract Bank {
         require(freezeEnd[msg.sender] < now);
         msg.sender.transfer(balances[msg.sender]);
         balances[msg.sender]=0;
+    }
+    
+    //@author Daniel Niemczyk
+    function sendMoney(uint _amount, address _address) public {
+        require(balances[msg.sender] > _amount);
+        balances[msg.sender] -= _amount;
+        balances[_address] += _amount;
     }
 
     //@author Daniel Niemczyk
@@ -54,5 +61,5 @@ contract Bank {
     function getMessage(address _address) public view returns (string memory) {
         return messages[_address];
     }
-    
+
 }
