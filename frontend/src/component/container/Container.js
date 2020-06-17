@@ -8,3 +8,13 @@ export const Container = styled.div`
     padding: 5%;
     margin: auto;
 `;
+
+
+export const InnerContainer= styled.div`
+    background-color: red;
+    border-radius: 20px;
+    width: 100%;
+    height: 80%;
+    padding: 5%;
+    margin: auto;
+    `;

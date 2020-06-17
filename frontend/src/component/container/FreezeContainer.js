@@ -1,14 +1,18 @@
 import React from 'react';
 import Tabs from './Tabs';
-import { Container } from './Container';
+import { Container, InnerContainer } from './Container';
 import styled from 'styled-components';
-import {NAVIGATION_FREEZE_TEXT} from '../../constants'
-
+import {} from '../../constants';
+import {NAVIGATION_FREEZE_TEXT } from '../../constants';
 require('./styletab.css');
 
 const StyledContainer = styled(Container)`
-    /* Special Style for inner Container */
+    /* Special Style for  Container */
 `;
+const StyledInnerContainer = styled(InnerContainer)`
+/* Special Style for inner Container */
+`;
+
 
 export const FreezeContainer = () => (
     <StyledContainer>
@@ -19,6 +23,9 @@ export const FreezeContainer = () => (
             <div label="Dauerauftrag ">Nothing to see here, this tab is <em>extinct</em>!</div>
         </Tabs> */}
         
+        <StyledInnerContainer>
+          <Datepicker></Datepicker>
+        </StyledInnerContainer>
         
     </StyledContainer>
     

@@ -2,7 +2,7 @@ import React from 'react';
 import Tabs from './Tabs';
 import styled from 'styled-components';
 import { Container } from './Container';
-import {NAVIGATION_MESSAGE_TEXT} from '../../constants'
+import {NAVIGATION_MESSAGE_TEXT} from '../../constants';
 
 require('./styletab.css');
 
