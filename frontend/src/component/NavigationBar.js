@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Nav, Navbar } from 'react-bootstrap';
-import { LogoBankoSolo } from '../LogoBankoSolo.png';
+// import { LogoBankoSolo } from '../LogoBankoSolo.png';
 import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH, NAVIGATION_MESSAGE_TEXT, NAVIGATION_SEND_TEXT, NAVIGATION_FREEZE_TEXT} from '../constants';
 
 const Style = styled.div`

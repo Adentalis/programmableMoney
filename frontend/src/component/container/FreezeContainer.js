@@ -1,10 +1,14 @@
-import React from 'react';
-import Tabs from './Tabs';
+import React  from 'react';
+// import React ,{useState} from 'react';
+// import Tabs from './Tabs';
 import { Container, InnerContainer } from './Container';
 import styled from 'styled-components';
 import {} from '../../constants';
 import {NAVIGATION_FREEZE_TEXT } from '../../constants';
+//import 'react-datepicker/dist/react-datepicker.css'
+// import DatePicker from 'react-datepicker';
 require('./styletab.css');
+
 
 const StyledContainer = styled(Container)`
     /* Special Style for  Container */
@@ -12,9 +16,11 @@ const StyledContainer = styled(Container)`
 const StyledInnerContainer = styled(InnerContainer)`
 /* Special Style for inner Container */
 `;
+// const [startDate, setStartDate] = useState(new Date());
 
 
 export const FreezeContainer = () => (
+    
     <StyledContainer>
         <h1 style={{color: '#E6E6FA'}}>{NAVIGATION_FREEZE_TEXT}</h1>
         {/* <Tabs>
@@ -24,8 +30,17 @@ export const FreezeContainer = () => (
         </Tabs> */}
         
         <StyledInnerContainer>
-          <Datepicker></Datepicker>
-        </StyledInnerContainer>
+        
+    {/* <DatePicker
+      selected={startDate}
+      onChange={date => setStartDate(date)}
+      showTimeSelect
+      showTimeSelectOnly
+      timeIntervals={15}
+      timeCaption="Time"
+      dateFormat="h:mm aa"
+    /> */}
+           </StyledInnerContainer>
         
     </StyledContainer>
     

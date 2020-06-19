@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from './Container';
 import styled from 'styled-components';
-import { INFOCONTAINER_LAST_TRANSACTION_TEXT} from '../../constants';
+// import { INFOCONTAINER_LAST_TRANSACTION_TEXT} from '../../constants';
 require('./styletab.css');
 
 
@@ -27,8 +27,11 @@ const Date = styled.h1`
     position: sticky;
 `;
 
+
+
 export const InfoContainer = () => (
     <StyledContainer>
+       
         <LastTransaction>Letzte Transaktion</LastTransaction>
         <Amount>dsa</Amount>
         <Date>dsadsa</Date>
@@ -50,7 +53,7 @@ export const InfoContainer = () => (
         <h1 style={{color: '#E6E6FA',}}>Datum:</h1>  
         </p>
         */}
-        
+       
             
     </StyledContainer>
 )
