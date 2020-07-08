@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Nav, Navbar } from 'react-bootstrap';
-// import { LogoBankoSolo } from '../LogoBankoSolo.png';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH, NAVIGATION_MESSAGE_TEXT, NAVIGATION_SEND_TEXT, NAVIGATION_FREEZE_TEXT} from '../constants';
 
 const Style = styled.div`
@@ -20,16 +19,12 @@ const Style = styled.div`
     color: #E6E6FA;
     &:hover { color: white; }
   }
-  .LogoBankoSolo{
-    font-size: 7vh:
-    font-weight: bold: 
-    text-shadow: 3px; 
-  }
   .form-center {
     position: absolute !important;
     left: 25%;
     right: 25%;
   }
+
   `;
 
  
@@ -37,21 +32,22 @@ const Style = styled.div`
 
 export const NavigationBar = () => (
   <Style>
-    <Navbar expand="lg">
+    <Navbar collapseOnSelect expand="lg">
       <Navbar.Brand >
-     
-
- 
-  
+        Logo
       </Navbar.Brand>
-      <Navbar.Collapse id="basic-navbar-nav">
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
           <Nav.Item><Nav.Link href={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Nav.Link></Nav.Item> 
           <Nav.Item><Nav.Link href={"/" + NAVIGATION_SEND_PATH}>{NAVIGATION_SEND_TEXT}</Nav.Link></Nav.Item>
           <Nav.Item><Nav.Link href={"/" + NAVIGATION_FREEZE_PATH}>{NAVIGATION_FREEZE_TEXT}</Nav.Link></Nav.Item>
         </Nav>
-          <Nav className="ml-auto">
-          <Nav.Item>Hier Steht deine Adresse</Nav.Item>
+        <Nav className="ml-auto">
+          <NavDropdown.Divider />
+          <Nav.Item>
+          Hier Steht deine Adresse
+          </Nav.Item>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

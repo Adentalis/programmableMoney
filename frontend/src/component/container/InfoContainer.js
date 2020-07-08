@@ -1,59 +1,57 @@
 import React from 'react';
-import { Container } from './Container';
+import { Container, Header, Divider } from './Container';
 import styled from 'styled-components';
-// import { INFOCONTAINER_LAST_TRANSACTION_TEXT} from '../../constants';
-require('./styletab.css');
-
 
 const StyledContainer = styled(Container)`
-`;
-
-const LastTransaction = styled.h1`
     color: #E6E6FA;
-    top: 10%;
-    position: sticky;
-`;
-
-const Amount = styled.h1`
-    color: #E6E6FA;
-    position: sticky;
-    top: 50%;
-    bottom: 50%;
-`;
-
-const Date = styled.h1`
-    color: #E6E6FA;
-    bottom: 10px;
-    position: sticky;
+    position: relative;
+    width: calc(100% - 200px);
+    height: calc(100% - 200px);
+    margin: 100px 100px 100px 100px;
 `;
 
 
+const Content = styled.div`
+    position: relative;
+    width: 100%;    
+    height: calc(100% - 80px); 
+    padding: 20px;
+    font-size: x-large;
+`;
+
+
+const tableStyle = {
+    width: "100%",
+    height: "100%"
+};
+
+const thStyle = {
+    width: "30%"
+}
+
+const Table = () => (
+    <table style={tableStyle}>
+        <tr>
+            <th style={thStyle}>Datum</th>
+            <td>XXXXX</td>
+        </tr>
+        <tr>
+            <th tyle={thStyle}>Adresse</th>
+            <td>YYYYY</td>
+        </tr>
+        <tr>
+            <th tyle={thStyle}>Betrag</th>
+            <td>ZZZZZ</td>
+        </tr>
+    </table> 
+)
 
 export const InfoContainer = () => (
     <StyledContainer>
-       
-        <LastTransaction>Letzte Transaktion</LastTransaction>
-        <Amount>dsa</Amount>
-        <Date>dsadsa</Date>
-        
-        {/*
-        <p >
-       
-        <br></br> 
-        <br></br> 
-        <br></br> 
-        <br></br> 
-        <br></br> 
-        <h1 style={{color: '#E6E6FA',}}>Betrag:</h1>  
-        <br></br>
-        <br></br> 
-        <br></br> 
-        <br></br> 
-        <br></br> 
-        <h1 style={{color: '#E6E6FA',}}>Datum:</h1>  
-        </p>
-        */}
-       
-            
+        <Header>Letzte Transaktion</Header>
+        <Divider />
+        <Content>
+            <Table />
+        </Content>
     </StyledContainer>
 )
