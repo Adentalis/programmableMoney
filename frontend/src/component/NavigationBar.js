@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Nav, Navbar } from 'react-bootstrap';
+// import { LogoBankoSolo } from '../LogoBankoSolo.png';
 import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH, NAVIGATION_MESSAGE_TEXT, NAVIGATION_SEND_TEXT, NAVIGATION_FREEZE_TEXT} from '../constants';
 
 const Style = styled.div`
@@ -19,6 +20,11 @@ const Style = styled.div`
     color: #E6E6FA;
     &:hover { color: white; }
   }
+  .LogoBankoSolo{
+    font-size: 7vh:
+    font-weight: bold: 
+    text-shadow: 3px; 
+  }
   .form-center {
     position: absolute !important;
     left: 25%;
@@ -26,11 +32,18 @@ const Style = styled.div`
   }
   `;
 
+ 
+ 
+
 export const NavigationBar = () => (
   <Style>
     <Navbar expand="lg">
-      <Navbar.Brand href="/">Tutorial</Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+      <Navbar.Brand >
+     
+
+ 
+  
+      </Navbar.Brand>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           <Nav.Item><Nav.Link href={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Nav.Link></Nav.Item> 
