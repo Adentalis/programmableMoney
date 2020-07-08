@@ -8,7 +8,7 @@ import NameContract from "./contracts/NameContract.json";
 import getWeb3 from "./getWeb3";
 
 import './App.css';
-//import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
  
 class App extends Component {
