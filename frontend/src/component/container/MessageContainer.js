@@ -39,10 +39,14 @@ export const MessageContainer = () => (
                         <textarea class="form-control z-depth-1" id="exampleFormControlTextarea6" rows="3" placeholder="Hier Absenderadresse hinzufügen"></textarea>
                     </div>
                     
-                    <button type="button" class="btn btn-secondary center">Abschicken</button>
+                    
                    
                     </StyledInnerContainer>
-                <button type="button" class="btn btn-secondary btn-lg btn-block">abschicken</button>
+                    <p>
+                    </p>
+                    <p></p>
+                    <button type="button" class="buttonstyling">Abschicken</button>
+                
             </div>
         </Tabs>
 
