@@ -2,8 +2,6 @@
   /* border-bottom: 1px solid #9575cd; */
   padding-left: 0;
   border-radius: 20px;
-  
-  
 }
 
 .tab-list-item {
@@ -13,7 +11,6 @@
   padding: 0.5rem 0.75rem;
   border-radius: 20px;
   color: white; 
- 
 }
 
 .tab-list-active {

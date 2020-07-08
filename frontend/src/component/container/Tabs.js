@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import Tab from './Tab';
+require('./styletab.css');
+
 
 class Tabs extends Component {
   static propTypes = {
