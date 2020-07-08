@@ -1,16 +1,11 @@
 import React, { Component } from "react";
-
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import NavigationBar from './component/NavigationBar';
-import { SendContainer, MessageContainer, FreezeContainer, InfoContainer } from './component';
-
+import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import NameContract from "./contracts/NameContract.json";
+import NavBar from './NavBar';
 import getWeb3 from "./getWeb3";
 
-import './App.css';
-//import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import "./App.css";
 
- 
 class App extends Component {
   state = { name: "", newName: "", web3: null, network: null, accounts: null, balance: null, contract: null };
 
@@ -37,10 +32,13 @@ class App extends Component {
         deployedNetwork && deployedNetwork.address,
       );
 
-      this.setState({ web3, network, accounts, balance, contract: instance } );
-      //this.setState({ web3, network, accounts, balance, contract: instance }, this.runExample);
+      // Set web3, accounts, and contract to the state, and then proceed with an
+      // example of interacting with the contract's methods.
+      // this.setState({ web3, accounts, contract: instance }, this.runExample); // Wenn Diese Zeile dabei ist, wird direkt am anfang der Letzte Wert gezogen! :)
+      this.setState({ web3, network, accounts, balance, contract: instance }, this.runExample);
 
     } catch (error) {
+      // Catch any errors for any of the above operations.
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`,
       );
@@ -72,6 +70,11 @@ class App extends Component {
     this.setState({name: response, balance});
   }
 
+  //window.ethereum.on('accountsChanged', function (accounts){
+    //this.runExample();
+    //this.setState({accounts});
+  //})
+
   runExample = async () => {
     const { contract } = this.state;
 
@@ -88,22 +91,16 @@ class App extends Component {
     }
     return (
       <React.Fragment>
-      <Router> 
-        <NavigationBar account={this.state.accounts[0]} balance={this.state.balance / 1000000000000000000} network={this.state.network}/>
-        <div className ="content">
-          <div className="left">
-            <Switch>
-              <Route path="/message" component={MessageContainer} />
-              <Route path="/send" component={SendContainer} />
-              <Route path="/freeze" component={FreezeContainer} />
-            </Switch>
-          </div>
-          <div className="right">
-            <InfoContainer />
-          </div>
+        <NavBar account={this.state.accounts[0]} balance={this.state.balance / 1000000000000000000} network={this.state.network}/>
+        <div className="App">
+          <h1>Test Project!</h1>
+          <div>Der gespeicherte Name lautet: {this.state.name}</div>
+          <form onSubmit={this.handleSubmit}>
+            <input type="text" value={this.state.newName} onChange={this.handleChange} />
+            <input type="submit" value="Ändern" />
+          </form>
         </div>
-      </Router>
-    </React.Fragment>
+      </React.Fragment>
     );
   }
 }
