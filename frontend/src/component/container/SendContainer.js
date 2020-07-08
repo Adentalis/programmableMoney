@@ -2,17 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import Tabs from './Tabs';
 import { Container, InnerContainer } from './Container';
-import { NAVIGATION_SEND_TEXT } from '../../constants'
-import DropdownButton from 'react-bootstrap/DropdownButton'
+import { NAVIGATION_SEND_TEXT } from '../../constants';
+import Dropdown from '../dropdownsendmoney';
 require('./styletab.css');
 
 const StyledContainer = styled(Container)`
     /* Special Style for inner Container */
 `;
 
+  
 const StyledInnerContainer = styled(InnerContainer)`
 /* Special Style for inner Container */
 `;
+
 export const SendContainer = () => (
     <StyledContainer>
         <h1 style={{ color: '#E6E6FA', }}>{NAVIGATION_SEND_TEXT}</h1>
@@ -49,19 +51,20 @@ export const SendContainer = () => (
                     </div>
 
                 </StyledInnerContainer>
-                
+                <Dropdown/>
+               
+  
+
+             
+
+
                 
       
 
                 
                 {/* <button type="button" class="btn btn-secondary btn-lg btn-block">bestätigen</button> */}
             </div>
-            <DropdownButton id="dropdown-item-button" title="Dropdown button">
-            <Dropdown.Item as="button">Action</Dropdown.Item>
-            <Dropdown.Item as="button">Another action</Dropdown.Item>
-            <Dropdown.Item as="button">Something else</Dropdown.Item>
-            </DropdownButton>
-
+            
         </Tabs>
     </StyledContainer>
 )
