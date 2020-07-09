@@ -4,7 +4,6 @@
     import './dropdownsendmoney.css';
     
     const techCompanies = [
-     
       { label: "alle 15 Tage", value: 1 },
       { label: "zum 1. im Monat", value: 2},
       { label: "alle 3 Monate", value: 3 },
