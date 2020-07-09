@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
     background-color: #4B0082;
-    border-radius: 10px;
+    border-radius: 2.5px;
     width: calc(100% - 50px);
     min-width: 380px;
     height: calc(100% - 50px);
@@ -36,7 +36,7 @@ export const Content = styled.div`
 
 export const InnerContainer= styled.div`
     background-color: #9575cd ;
-    border-radius: 20px;
+    border-radius: 2.5px;
     width: 100%;
     height: 80%;
     padding: 5%;
