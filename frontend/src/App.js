@@ -1,17 +1,26 @@
 import React, { Component } from "react";
 
-import NavigationBar from './component/NavigationBar';
+import NavigationBar from "./component/NavigationBar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { SendContainer, MessageContainer, FreezeContainer, InfoContainer } from './component';
+import { SendContainer, MessageContainer, InfoContainer } from "./component";
+
+import FreezeContainer from "./component/container/FreezeContainer/FreezeContainer.js";
 
 import NameContract from "./contracts/NameContract.json";
 import getWeb3 from "./getWeb3";
 
-import './App.css';
+import "./App.css";
 
- 
 class App extends Component {
-  state = { name: "", newName: "", web3: null, network: null, accounts: null, balance: null, contract: null };
+  state = {
+    name: "",
+    newName: "",
+    web3: null,
+    network: null,
+    accounts: null,
+    balance: null,
+    contract: null,
+  };
 
   componentDidMount = async () => {
     try {
@@ -22,7 +31,7 @@ class App extends Component {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
-      const network = await web3.eth.net.getNetworkType();      
+      const network = await web3.eth.net.getNetworkType();
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
 
@@ -33,42 +42,43 @@ class App extends Component {
       const deployedNetwork = NameContract.networks[networkId];
       const instance = new web3.eth.Contract(
         NameContract.abi,
-        deployedNetwork && deployedNetwork.address,
+        deployedNetwork && deployedNetwork.address
       );
 
-      this.setState({ web3, network, accounts, balance, contract: instance } );
+      this.setState({ web3, network, accounts, balance, contract: instance });
       //this.setState({ web3, network, accounts, balance, contract: instance }, this.runExample);
-
     } catch (error) {
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
+        `Failed to load web3, accounts, or contract. Check console for details.`
       );
       console.error(error);
     }
   };
 
-  handleChange(event){
-    this.setState({newName: event.target.value});
+  handleChange(event) {
+    this.setState({ newName: event.target.value });
   }
 
-  async handleAccounsChanged(){
+  async handleAccounsChanged() {
     const { web3 } = this.state;
 
     const accounts = await web3.wth.getAccounts();
     const balance = await web3.eth.getBalance(accounts[0]);
 
-    this.setState({balance});
+    this.setState({ balance });
   }
 
-  async handleSubmit(event){
+  async handleSubmit(event) {
     event.preventDefault();
 
     const { web3, accounts, contract } = this.state;
-    await contract.methods.setName(this.state.newName).send({from: accounts[0]});
+    await contract.methods
+      .setName(this.state.newName)
+      .send({ from: accounts[0] });
     const response = await contract.methods.getName().call();
     const balance = await web3.eth.getBalance(accounts[0]);
 
-    this.setState({name: response, balance});
+    this.setState({ name: response, balance });
   }
 
   runExample = async () => {
@@ -87,22 +97,28 @@ class App extends Component {
     }
     return (
       <React.Fragment>
-      <Router> 
-        <NavigationBar account={this.state.accounts[0]} balance={this.state.balance / 1000000000000000000} network={this.state.network}/>
-        <div className ="content">
-          <div className="left">
-            <Switch>
-              <Route path="/message" component={MessageContainer} />
-              <Route path="/send" component={SendContainer} />
-              <Route path="/freeze" component={FreezeContainer} />
-            </Switch>
+        <Router>
+          <NavigationBar
+            account={this.state.accounts[0]}
+            balance={this.state.balance / 1000000000000000000}
+            network={this.state.network}
+          />
+          <div className="content">
+            <div className="left">
+              <Switch>
+                <Route path="/message" component={MessageContainer} />
+                <Route path="/send" component={SendContainer} />
+                <Route path="/freeze">
+                  <FreezeContainer />
+                </Route>
+              </Switch>
+            </div>
+            <div className="right">
+              <InfoContainer />
+            </div>
           </div>
-          <div className="right">
-            <InfoContainer />
-          </div>
-        </div>
-      </Router>
-    </React.Fragment>
+        </Router>
+      </React.Fragment>
     );
   }
 }
