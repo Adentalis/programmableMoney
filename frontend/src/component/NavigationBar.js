@@ -50,11 +50,6 @@ class NavigationBar extends Component {
               <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Link></Nav.Item>
               <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_SEND_PATH}>{NAVIGATION_SEND_TEXT}</Link></Nav.Item>
               <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_FREEZE_PATH}>{NAVIGATION_FREEZE_TEXT}</Link></Nav.Item>
-              {/*
-              <Nav.Item><Nav.Link href={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Nav.Link></Nav.Item> 
-              <Nav.Item><Nav.Link href={"/" + NAVIGATION_SEND_PATH}>{NAVIGATION_SEND_TEXT}</Nav.Link></Nav.Item>
-              <Nav.Item><Nav.Link href={"/" + NAVIGATION_FREEZE_PATH}>{NAVIGATION_FREEZE_TEXT}</Nav.Link></Nav.Item>
-              */}
             </Nav>
             <Nav className="ml-auto">
               <NavDropdown.Divider />
