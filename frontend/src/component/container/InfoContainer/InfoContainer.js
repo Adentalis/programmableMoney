@@ -27,7 +27,6 @@ const thStyle = {
   width: "30%",
 };
 
-//-----
 export default class FreezeContainer extends Component {
   constructor(props) {
     super(props);
