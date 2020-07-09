@@ -2,9 +2,11 @@ import React, { Component } from "react";
 
 import NavigationBar from "./component/NavigationBar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { SendContainer, MessageContainer, InfoContainer } from "./component";
 
 import FreezeContainer from "./component/container/FreezeContainer/FreezeContainer.js";
+import MessageContainer from "./component/container/MessageContainer/MessageContainer.js";
+import InfoContainer from "./component/container/InfoContainer/InfoContainer.js";
+import SendContainer from "./component/container/SendContainer/SendContainer.js";
 
 import NameContract from "./contracts/NameContract.json";
 import getWeb3 from "./getWeb3";
@@ -12,22 +14,24 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = {
-    name: "",
-    newName: "",
-    web3: null,
-    network: null,
-    accounts: null,
-    balance: null,
-    contract: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      newName: "",
+      web3: null,
+      network: null,
+      accounts: null,
+      balance: null,
+      contract: null,
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAccountsChanged = this.handleAccountsChanged.bind(this);
+  }
 
   componentDidMount = async () => {
     try {
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleAccounsChanged = this.handleAccounsChanged.bind(this);
-
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
@@ -59,7 +63,7 @@ class App extends Component {
     this.setState({ newName: event.target.value });
   }
 
-  async handleAccounsChanged() {
+  async handleAccountsChanged() {
     const { web3 } = this.state;
 
     const accounts = await web3.wth.getAccounts();
@@ -108,9 +112,7 @@ class App extends Component {
               <Switch>
                 <Route path="/message" component={MessageContainer} />
                 <Route path="/send" component={SendContainer} />
-                <Route path="/freeze">
-                  <FreezeContainer />
-                </Route>
+                <Route path="/freeze" component={FreezeContainer} />
               </Switch>
             </div>
             <div className="right">
