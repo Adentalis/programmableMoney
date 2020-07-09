@@ -1,22 +1,22 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH, NAVIGATION_MESSAGE_TEXT, NAVIGATION_SEND_TEXT, NAVIGATION_FREEZE_TEXT} from '../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faNetworkWired, faBalanceScale } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faNetworkWired } from '@fortawesome/free-solid-svg-icons';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const Style = styled.div`
 .navbar { 
   background-color: #4B0082; 
   color: #E6E6FA;
-
 }
 a, 
 .navbar-light 
 .nav-link {
   color: #E6E6FA;
-  &:hover { color: white; }
+  &:hover, &:focus, &:active { color: white; }
 }
 .navbar-brand {
   font-size: 1.4em;
@@ -36,7 +36,6 @@ a,
 `;
 
 
-
 class NavigationBar extends Component {
   render() {
     return (
@@ -48,9 +47,14 @@ class NavigationBar extends Component {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
+              <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Link></Nav.Item>
+              <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_SEND_PATH}>{NAVIGATION_SEND_TEXT}</Link></Nav.Item>
+              <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_FREEZE_PATH}>{NAVIGATION_FREEZE_TEXT}</Link></Nav.Item>
+              {/*
               <Nav.Item><Nav.Link href={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Nav.Link></Nav.Item> 
               <Nav.Item><Nav.Link href={"/" + NAVIGATION_SEND_PATH}>{NAVIGATION_SEND_TEXT}</Nav.Link></Nav.Item>
               <Nav.Item><Nav.Link href={"/" + NAVIGATION_FREEZE_PATH}>{NAVIGATION_FREEZE_TEXT}</Nav.Link></Nav.Item>
+              */}
             </Nav>
             <Nav className="ml-auto">
               <NavDropdown.Divider />
