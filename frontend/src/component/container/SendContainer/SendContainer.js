@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import Tabs from './Tabs';
-import Dropdown from '../dropdownsendmoney';
-import { Container, InnerContainer, Header, Divider, Content } from './Container';
-import { NAVIGATION_SEND_TEXT } from '../../constants'
-import './SendContainer.css';
-require('./styletab.css');
+import Tabs from '../Tab/Tabs';
+import Dropdown from './dropdownsendmoney';
+import { Container, InnerContainer, Header, Divider, Content, Button } from '../Container';
+import { NAVIGATION_SEND_TEXT } from '../../../constants'
 
 const StyledContainer = styled(Container)`
     /* Special Style for inner Container */
@@ -13,6 +11,10 @@ const StyledContainer = styled(Container)`
 
 
 const StyledInnerContainer = styled(InnerContainer)`
+    /* Special Style for inner Container */
+`;
+
+export const StyledButton = styled(Button)`
     /* Special Style for inner Container */
 `;
 
@@ -35,7 +37,7 @@ export const SendContainer = () => (
                     <label for="exampleInputEmail1">Betrag </label>
                     <input type="betrag" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Betrag eingeben" />
                 </StyledInnerContainer>
-                <button type="button" class="buttonstyling">bestätigen</button>
+                <StyledButton type="button">bestätigen</StyledButton>
             </div>
             <div label="Termin">
                 <StyledInnerContainer>
@@ -54,7 +56,7 @@ export const SendContainer = () => (
                     <label for="exampleInputEmail1">Betrag </label>
                     <input type="betrag" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Betrag eingeben" />
                 </StyledInnerContainer>
-                <button type="button" class="buttonstyling">bestätigen</button>
+                <StyledButton type="button">bestätigen</StyledButton>
             </div>
             <div label="Dauerauftrag ">
                 <StyledInnerContainer>
@@ -67,7 +69,7 @@ export const SendContainer = () => (
                     <input type="betrag" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Betrag eingeben" />
                     <Dropdown />
                 </StyledInnerContainer>
-                <button  className="buttonstyling">bestätigen</button>        
+                <StyledButton>bestätigen</StyledButton>        
             </div>
         </Tabs>
         </Content>

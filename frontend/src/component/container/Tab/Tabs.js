@@ -37,7 +37,6 @@ class Tabs extends Component {
         <ol className="tab-list">
           {children.map((child) => {
             const { label } = child.props;
-
             return (
               <Tab
                 activeTab={activeTab}

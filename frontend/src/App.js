@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NavigationBar from './component/NavigationBar';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { SendContainer, MessageContainer, FreezeContainer, InfoContainer } from './component';
 
 import NameContract from "./contracts/NameContract.json";
 import getWeb3 from "./getWeb3";
 
 import './App.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
  
 class App extends Component {
