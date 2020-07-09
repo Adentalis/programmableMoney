@@ -24,11 +24,11 @@ export const StyledButton = styled(Button)`
   /* Special Style for inner Container */
 `;
 
-export default class FreezeContainer extends Component {
+export default class SendContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      freezeTime: "",
+      test: "",
     };
   }
 
