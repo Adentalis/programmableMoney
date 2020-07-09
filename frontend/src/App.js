@@ -2,13 +2,11 @@ import React, { Component } from "react";
 
 import NavigationBar from "./component/NavigationBar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { SendContainer } from "./component";
 
 import FreezeContainer from "./component/container/FreezeContainer/FreezeContainer.js";
 import MessageContainer from "./component/container/MessageContainer/MessageContainer.js";
 import InfoContainer from "./component/container/InfoContainer/InfoContainer.js";
-
-
+import SendContainer from "./component/container/SendContainer/SendContainer.js";
 
 import NameContract from "./contracts/NameContract.json";
 import getWeb3 from "./getWeb3";
@@ -112,9 +110,7 @@ class App extends Component {
               <Switch>
                 <Route path="/message" component={MessageContainer} />
                 <Route path="/send" component={SendContainer} />
-                <Route path="/freeze">
-                  <FreezeContainer />
-                </Route>
+                <Route path="/freeze" component={FreezeContainer}/>
               </Switch>
             </div>
             <div className="right">
