@@ -2,9 +2,10 @@ import React, { Component } from "react";
 
 import NavigationBar from "./component/NavigationBar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { SendContainer, MessageContainer, InfoContainer } from "./component";
+import { SendContainer, InfoContainer } from "./component";
 
 import FreezeContainer from "./component/container/FreezeContainer/FreezeContainer.js";
+import MessageContainer from "./component/container/MessageContainer/MessageContainer.js";
 
 import NameContract from "./contracts/NameContract.json";
 import getWeb3 from "./getWeb3";
