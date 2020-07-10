@@ -64,6 +64,16 @@ class NavigationBar extends Component {
     this.unsubscribe();
   }
 
+  getAccount = () => {
+    var account = this.state.account;
+    return account;
+  }
+
+  getBalance = () => {
+    var balance = this.state.balance;
+    return balance / 1000000000000000000;
+  }
+
   render() {
     return (
       <Style>
@@ -82,13 +92,13 @@ class NavigationBar extends Component {
               <NavDropdown.Divider />
               <div>
               <FontAwesomeIcon icon={faUser} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
-                <Nav.Item style={{display: "inline-block"}}> {this.state.account} </Nav.Item>
+                <Nav.Item style={{display: "inline-block"}}> {this.getAccount()} </Nav.Item>
               </div>
-              {/*<div>
               <div>
                 <FontAwesomeIcon icon={faUser} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
-                <Nav.Item style={{display: "inline-block"}}> {this.state.balance} </Nav.Item>
+                <Nav.Item style={{display: "inline-block"}}> {this.getBalance()} ETH</Nav.Item>
               </div>
+              {/*
               <div>
                 <FontAwesomeIcon icon={faNetworkWired} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
                 <Nav.Item style={{display: "inline-block"}}> {this.state.network} </Nav.Item>
