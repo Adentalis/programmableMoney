@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { Drizzle, generateStore } from "drizzle";
+import drizzleOptions from './drizzleOptions'
 import App from './App';
+import './index.css';
 
-
-
-ReactDOM.render(<App />, document.getElementById('root'));
+const drizzleStore = generateStore(drizzleOptions);
+const drizzle = new Drizzle(drizzleOptions, drizzleStore);
+ReactDOM.render(<App drizzle={drizzle}/>, document.getElementById('root'));

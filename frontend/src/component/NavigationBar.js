@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH, NAVIGATION_MESSAGE_TEXT, NAVIGATION_SEND_TEXT, NAVIGATION_FREEZE_TEXT} from '../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faNetworkWired } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const Style = styled.div`
@@ -37,6 +37,33 @@ a,
 
 
 class NavigationBar extends Component {
+
+  state = {
+    account: null,
+    accountBalances: null,
+    network: null
+  };
+
+
+  componentDidMount = () => {
+    const {drizzle} = this.props;
+
+    this.unsubscribe = drizzle.store.subscribe(() => {
+        const drizzleState = drizzle.store.getState();
+
+        if(drizzleState.drizzleStatus.initialized) {
+            this.setState({
+                account: this.props.drizzleState.accounts[0],
+                balance: this.props.drizzleState.accountBalances[this.props.drizzleState.accounts[0]],
+            });
+        }
+    });
+  }
+
+  componentWillUnmount = () => {
+    this.unsubscribe();
+  }
+
   render() {
     return (
       <Style>
@@ -53,19 +80,20 @@ class NavigationBar extends Component {
             </Nav>
             <Nav className="ml-auto">
               <NavDropdown.Divider />
-              {/*<div>
-                <FontAwesomeIcon icon={faBalanceScale} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
-                <Nav.Item style={{display: "inline-block"}}> {this.props.balance} </Nav.Item>
+              <div>
+              <FontAwesomeIcon icon={faUser} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
+                <Nav.Item style={{display: "inline-block"}}> {this.state.account} </Nav.Item>
               </div>
-              */}
+              {/*<div>
               <div>
                 <FontAwesomeIcon icon={faUser} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
-                <Nav.Item style={{display: "inline-block"}}> {this.props.account} </Nav.Item>
+                <Nav.Item style={{display: "inline-block"}}> {this.state.balance} </Nav.Item>
               </div>
               <div>
                 <FontAwesomeIcon icon={faNetworkWired} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
-                <Nav.Item style={{display: "inline-block"}}> {this.props.network} </Nav.Item>
+                <Nav.Item style={{display: "inline-block"}}> {this.state.network} </Nav.Item>
               </div>
+              */}
             </Nav>
           </Navbar.Collapse>
         </Navbar>

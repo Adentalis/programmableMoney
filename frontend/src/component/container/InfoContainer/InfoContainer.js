@@ -27,17 +27,32 @@ const thStyle = {
   width: "30%",
 };
 
-export default class FreezeContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      date: "gestern",
-      address: "Weihnachtsmann",
-      value: "4Millionen ETH",
-    };
+export default class InfoContainer extends Component {
+  state = { 
+    dataKey: null,       
+    date: "gestern",
+    address: "Weihnachtsmann",
+    value: "4Millionen ETH", 
+  };
+
+  componentDidMount() {
+    const { drizzle } = this.props;
+    const contract = drizzle.contracts.Bank;
+
+    // get and save the key for the variable we are interested in
+    const dataKey = contract.methods["getLastTrasaction"].cacheCall();
+    this.setState({ dataKey });
   }
 
   render() {
+
+    const { Bank } = this.props.drizzleState.contracts;
+    const storedData = Bank.getLastTrasaction[this.state.dataKey];
+
+    const address = storedData && storedData.value[0];
+    const date = storedData && storedData.value[1];
+    const value = storedData && storedData.value[2];
+
     return (
       <StyledContainer>
         <Header>Letzte Transaktion</Header>
@@ -46,15 +61,15 @@ export default class FreezeContainer extends Component {
           <table style={tableStyle}>
             <tr>
               <th style={thStyle}>Datum</th>
-              <td>{this.state.date}</td>
+              <td>{date}</td>
             </tr>
             <tr>
               <th style={thStyle}>Adresse</th>
-              <td>{this.state.address}</td>
+              <td>{address}</td>
             </tr>
             <tr>
               <th style={thStyle}>Betrag</th>
-              <td>{this.state.value}</td>
+              <td>{value}</td>
             </tr>
           </table>
         </Content>
