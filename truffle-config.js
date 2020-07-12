@@ -1,21 +1,36 @@
 const path = require("path");
+//connection to Mainnet or Ropsten
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+//a test mnemonic (private key) and InfuraToken
+const mnemonic =
+  "vital just maple tomato humble quick horn gorilla cereal access two mom";
+const InfuraToken = "f67704ac36e94096807d62b092b874bf";
+console.log("Truffle config has started");
 
 module.exports = {
   contracts_build_directory: path.join(__dirname, "frontend/src/contracts"),
-  networks: { 
-    dev_server: { 
-      network_id: "*", 
-      host: 'bankosolo.ddns.net', 
-      port: 8545 
+  networks: {
+    dev_server: {
+      network_id: "*",
+      host: "bankosolo.ddns.net",
+      port: 8545,
     },
-	  dev_local: { 
-      network_id: "*", 
-      host: 'localhost', 
-      port: 8545 
-    } 
-  }
+    dev_local: {
+      network_id: "*",
+      host: "localhost",
+      port: 8545,
+    },
+    ropsten: {
+      provider: function () {
+        return new HDWalletProvider(
+          mnemonic,
+          "https://ropsten.infura.io/v3/" + InfuraToken
+        );
+      },
+      network_id: 3,
+    },
+  },
 };
-
 
 /*
 --------------------------------------------------------------------------
