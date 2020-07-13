@@ -13,58 +13,88 @@ import "./App.css";
 class App extends Component {
   state = {
     loading: true,
-    drizzleState: null
+    drizzleState: null,
   };
 
   componentDidMount = () => {
-      const {drizzle} = this.props;
+    const { drizzle } = this.props;
 
-      this.unsubscribe = drizzle.store.subscribe(() => {
-          const drizzleState = drizzle.store.getState();
+    this.unsubscribe = drizzle.store.subscribe(() => {
+      const drizzleState = drizzle.store.getState();
 
-          if(drizzleState.drizzleStatus.initialized) {
-              this.setState({
-                  loading: false,
-                  drizzleState
-              });
-          }
-      });
-  }
+      if (drizzleState.drizzleStatus.initialized) {
+        this.setState({
+          loading: false,
+          drizzleState,
+        });
+      }
+    });
+  };
 
   componentWillUnmount = () => {
-      this.unsubscribe();
-  }
+    this.unsubscribe();
+  };
 
   render = () => {
-    if(this.state.loading) {
-        return (
-            <div className="alert alert-info" role="alert">
-                <h4 className="alert-heading">Drizzle Status</h4>
-                <p>Loading...</p>
-            </div>
-        );
+    if (this.state.loading) {
+      return (
+        <div className="alert alert-info" role="alert">
+          <h4 className="alert-heading">Drizzle Status</h4>
+          <p>Loading...</p>
+        </div>
+      );
     } else {
-        return (
-          <React.Fragment>
-            <Router>
-              <NavigationBar drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>
-              <div className="content">
-                <div className="left">
-                  <Switch>
-                    <Route path="/message" component={() => <MessageContainer drizzle={this.props.drizzle} drizzleState={this.state.drizzleState} />} />
-                    <Route path="/send" component={() => <SendContainer drizzle={this.props.drizzle} drizzleState={this.state.drizzleState} />} />
-                    <Route path="/freeze" component={() => <FreezeContainer drizzle={this.props.drizzle} drizzleState={this.state.drizzleState} />} />
-                  </Switch>
-                </div>
-                <div className="right">
-                  <InfoContainer drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>
-                </div>
+      return (
+        <React.Fragment>
+          <Router>
+            <NavigationBar
+              drizzle={this.props.drizzle}
+              drizzleState={this.state.drizzleState}
+            />
+            <div className="content">
+              <div className="left">
+                <Switch>
+                  <Route
+                    path="/message"
+                    component={() => (
+                      <MessageContainer
+                        drizzle={this.props.drizzle}
+                        drizzleState={this.state.drizzleState}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/send"
+                    component={() => (
+                      <SendContainer
+                        drizzle={this.props.drizzle}
+                        drizzleState={this.state.drizzleState}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/freeze"
+                    component={() => (
+                      <FreezeContainer
+                        drizzle={this.props.drizzle}
+                        drizzleState={this.state.drizzleState}
+                      />
+                    )}
+                  />
+                </Switch>
               </div>
-            </Router>
-          </React.Fragment>
+              <div className="right">
+                <InfoContainer
+                  drizzle={this.props.drizzle}
+                  drizzleState={this.state.drizzleState}
+                />
+              </div>
+            </div>
+          </Router>
+        </React.Fragment>
       );
     }
-  }
+  };
 }
 
 export default App;

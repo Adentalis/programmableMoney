@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Container, Header, Divider } from "../Container";
 import styled from "styled-components";
 
+import ReadString from "./ReadString";
+import SetString from "./SetString";
+
 const StyledContainer = styled(Container)`
   color: #e6e6fa;
   position: relative;
@@ -29,7 +32,7 @@ const thStyle = {
 
 export default class InfoContainer extends Component {
   state = { 
-    dataKey: null,       
+    lastTransaction: null,       
     date: "gestern",
     address: "Weihnachtsmann",
     value: "4Millionen ETH", 
@@ -40,14 +43,14 @@ export default class InfoContainer extends Component {
     const contract = drizzle.contracts.Bank;
 
     // get and save the key for the variable we are interested in
-    const dataKey = contract.methods["getLastTrasaction"].cacheCall();
-    this.setState({ dataKey });
+    const lastTransaction = contract.methods["getLastTrasaction"].cacheCall();
+    this.setState({ lastTransaction });
   }
 
   render() {
 
     const { Bank } = this.props.drizzleState.contracts;
-    const storedData = Bank.getLastTrasaction[this.state.dataKey];
+    const storedData = Bank.getLastTrasaction[this.state.lastTransaction];
 
     const address = storedData && storedData.value[0];
     const date = storedData && storedData.value[1];
@@ -73,6 +76,15 @@ export default class InfoContainer extends Component {
             </tr>
           </table>
         </Content>
+        <ReadString
+            drizzle={this.props.drizzle}
+            drizzleState={this.state.drizzleState}
+          />
+          <SetString
+            drizzle={this.props.drizzle}
+            drizzleState={this.state.drizzleState}
+          />
+
       </StyledContainer>
     );
   }

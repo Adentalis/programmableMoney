@@ -18,6 +18,16 @@ contract Bank {
         uint256 time;
     }
 
+
+    //
+string public myString = "Hello World";
+
+  function set(string memory x) public {
+    myString = x;
+  }
+
+    //
+
     function deposit() public payable {
         require(msg.value > 0);
         balances[msg.sender] += msg.value;
