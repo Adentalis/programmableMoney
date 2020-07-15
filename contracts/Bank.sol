@@ -84,7 +84,7 @@ string public myString = "Hello World";
         return messages[msg.sender];
     }
 
-    function getLastTrasaction()
+    function getLastTransaction()
         public
         view
         returns (

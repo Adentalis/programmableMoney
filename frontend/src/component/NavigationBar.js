@@ -51,10 +51,12 @@ class NavigationBar extends Component {
       account: null,
       accountBalances: null,
       network: null,
-      dataKey: null,
+      stackId: null,
     };
     this.deposit = this.deposit.bind(this);
     this.withdraw = this.withdraw.bind(this);
+    this.getOwnBalance = this.getOwnBalance.bind(this);
+
   }
 
   componentDidMount = () => {
@@ -94,6 +96,15 @@ class NavigationBar extends Component {
     //debugger;
   }
 
+  getOwnBalance(){
+    const { drizzle } = this.props;
+    const contract = drizzle.contracts.Bank;
+
+    // get and save the key for the variable we are interested in
+    const ownBalance = contract.methods["getOwnBalance"].cacheCall();
+    this.setState({ ownBalance });
+  }
+
   withdraw() {
     const { drizzle } = this.props;
     const contract = drizzle.contracts.Bank;
@@ -105,9 +116,11 @@ class NavigationBar extends Component {
   }
 
   render() {
+
     const { Bank } = this.props.drizzleState.contracts;
-    const storedData = Bank.getLastTrasaction[this.state.dataKey];
-    const data = storedData && storedData.value[0];
+    const ownBalanceData = Bank.getOwnBalance[this.state.ownBalance];
+
+    const ownBalance = ownBalanceData && ownBalanceData.value[0];
 
     return (
       <Style>
@@ -135,8 +148,8 @@ class NavigationBar extends Component {
             <Nav className="ml-auto">
               <NavDropdown.Divider />
               <div>
-                <Button>{data}</Button>
-                <Button>Geld auf Addresse 45</Button>
+                {/*<Button>{data}</Button>*/}
+                <Button onClick={this.getOwnBalance}>Geld auf Addresse {ownBalance}</Button>
                 <Button>---</Button>
                 <Button>Kontostand {this.state.accountBalances}</Button>
                 <Button onClick={this.deposit}>Einzahlen</Button>
