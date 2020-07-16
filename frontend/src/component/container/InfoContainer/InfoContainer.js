@@ -30,12 +30,94 @@ const thStyle = {
 
 export default class InfoContainer extends Component {
   state = {
+    transactionMode: 1,
+    transactionValue: '',
+    transactionValueInvalid: true,
     ownBalanceDataKey: null
   };
 
   componentDidMount() {
+    this.handleAmountChanged = this.handleAmountChanged.bind(this);
+    this.handleTransaction = this.handleTransaction.bind(this);
+    this.withdraw = this.withdraw.bind(this);
+    this.deposit = this.deposit.bind(this);
+
     this.getOwnBalance();
+
   }
+
+  setTransactionMode(mode){
+    //1 = einzahlen
+    //2 = auszahlen
+
+    this.setState({ transactionMode: mode });
+  }
+
+  handleInputChange = e => {
+    this.setState({transactionValue: e.target.value})
+    var validation = {
+      isNumber:function(str) {
+        var pattern = /^\d+$/;
+        return pattern.test(str);  // returns a boolean
+      }
+    };
+    if(validation.isNumber(e.target.value)) {
+      this.setState({transactionValueInvalid: false});
+    }else{
+      this.setState({ transactionValueInvalid: true });
+    }
+  };
+
+  handleAmountChanged = (e) =>{
+    this.setState({ transactionValue: e.target.value});
+    var newValue = e.target.value;
+    var validation = {
+      isNumber:function(str) {
+        var pattern = /^\d+$/;
+        return pattern.test(str);  // returns a boolean
+      }
+    };
+    if(validation.isNumber(newValue)) {
+      this.setState({transactionValueInvalid: false});
+    }else{
+      this.setState({ transactionValueInvalid: true });
+    }
+  }
+
+
+  handleTransaction = async () => {
+    if(this.state.transactionValueInvalid){
+      console.log("Invalid input for transcation");
+      return;
+    }
+    if(this.state.transactionMode == 1){
+      await this.deposit();
+    }else if(this.state.transactionMode == 2){
+      await this.withdraw();
+    }
+    this.setState({ transactionValue: '' });
+    this.setState({ transactionValueInvalid: true });
+    this.getOwnBalance();
+  };
+
+
+
+  deposit () {
+    const { transactionValue } = this.state;
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.Bank;
+    console.log("Deposit " + transactionValue);
+    contract.methods["deposit"].cacheSend({value: transactionValue, from: drizzleState.accounts[0]});
+  }
+
+
+  withdraw = async () => {
+    console.log("Withdraw " + this.state.transactionValue);
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.Bank;
+
+    contract.methods["withdraw"].cacheSend({from: drizzleState.accounts[0]});
+  };
 
   getOwnBalance(){
     const { drizzle } = this.props;
@@ -45,6 +127,7 @@ export default class InfoContainer extends Component {
     const ownBalanceDataKey = contract.methods["getOwnBalance"].cacheCall();
     this.setState({ ownBalanceDataKey });
   }
+
 
   render() {
 
@@ -57,20 +140,24 @@ export default class InfoContainer extends Component {
         <Header>Bankosolo</Header>
         <Divider />
         <Content>
-
+          {/*}
+          <div>{this.state.transactionMode}</div>
+          <div>{this.state.transactionValue}</div>
+          */}
           <Form inline>
+            {/*<div>{this.state.transactionMode}</div>*/}
             <table style={tableStyle}>
               <tr>
                 <th style={thStyle}>Guthaben</th>
                 <td>{ownBalance}</td>
               </tr>
             </table>
-            <FormControl style={{width: "50%", marginBottom: "10px"}} type="text" placeholder="Betrag" className="mr-sm-2" />
+            <FormControl style={{width: "50%", marginBottom: "10px"}} type="text" placeholder="Betrag" className="mr-sm-2" value={this.state.transactionValue} onChange={this.handleInputChange}/>
             <ToggleButtonGroup style={{width: "calc(50% - 10px)", marginBottom: "10px"}} type="radio" name="options" defaultValue={1}>
-              <ToggleButton value={1} variant="outline-light" >Einzahlen</ToggleButton>
-              <ToggleButton value={2} variant="outline-light" >Auszahlen</ToggleButton>
+              <ToggleButton value={1} variant="outline-light" onChange={(e) => this.setTransactionMode(e.currentTarget.value)}>Einzahlen</ToggleButton>
+              <ToggleButton value={2} variant="outline-light" onChange={(e) => this.setTransactionMode(e.currentTarget.value)}>Auszahlen</ToggleButton>
             </ToggleButtonGroup>
-            <Button variant="outline-light" block>Bestätigen</Button>
+            <Button variant="outline-light" disabled={this.state.transactionValueInvalid} onClick={this.handleTransaction} block>Bestätigen</Button>
           </Form>
         </Content>
       </StyledContainer>

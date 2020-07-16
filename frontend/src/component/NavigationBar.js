@@ -65,12 +65,12 @@ class NavigationBar extends Component {
   }
 
   getAccount = () => {
-    const{ account } = this.state.account;
+    let account = this.state.account;
     return account;
   }
 
   getBalance = () => {
-    const { balance}  = this.state.balance;
+    let balance = this.state.balance;
     return balance / 1000000000000000000;
   }
 
