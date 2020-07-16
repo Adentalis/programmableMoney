@@ -74,7 +74,7 @@ contract Bank {
         return messages[msg.sender];
     }
 
-    function getLastTrasaction()
+    function getLastTransaction()
         public
         view
         returns (

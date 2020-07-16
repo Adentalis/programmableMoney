@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH, NAVIGATION_MESSAGE_TEXT, NAVIGATION_SEND_TEXT, NAVIGATION_FREEZE_TEXT} from '../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
@@ -65,12 +65,12 @@ class NavigationBar extends Component {
   }
 
   getAccount = () => {
-    var account = this.state.account;
+    const{ account } = this.state.account;
     return account;
   }
 
   getBalance = () => {
-    var balance = this.state.balance;
+    const { balance}  = this.state.balance;
     return balance / 1000000000000000000;
   }
 

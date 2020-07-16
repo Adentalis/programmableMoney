@@ -7,7 +7,7 @@ import FreezeContainer from "./component/container/FreezeContainer/FreezeContain
 import MessageContainer from "./component/container/MessageContainer/MessageContainer.js";
 import InfoContainer from "./component/container/InfoContainer/InfoContainer.js";
 import SendContainer from "./component/container/SendContainer/SendContainer.js";
-
+import LastTxContainer from "./component/container/LastTxContainer/LastTxContainer";
 import "./App.css";
 
 class App extends Component {
@@ -58,6 +58,7 @@ class App extends Component {
                 </div>
                 <div className="right">
                   <InfoContainer drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>
+                  <LastTxContainer drizzle={this.props.drizzle} drizzleState={this.state.drizzleState}/>
                 </div>
               </div>
             </Router>
