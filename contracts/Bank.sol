@@ -23,11 +23,11 @@ contract Bank {
         balances[msg.sender] += msg.value;
     }
 
-    function withdraw() public {
-        require(balances[msg.sender] > 0);
+    function withdraw(uint256 _value) public {
+        require(balances[msg.sender] > _value);
         require(freezeEnd[msg.sender] < now);
-        msg.sender.transfer(balances[msg.sender]);
-        balances[msg.sender] = 0;
+        msg.sender.transfer(_value);
+        balances[msg.sender] -= _value;
     }
 
     function sendMoney(address _address, uint256 _value) public {
