@@ -12,6 +12,8 @@ import {
 } from "../Container";
 import { NAVIGATION_SEND_TEXT } from "../../../constants";
 
+import { FormControl } from "react-bootstrap";
+
 const StyledContainer = styled(Container)`
   /* Special Style for inner Container */
 `;
@@ -28,9 +30,27 @@ export default class SendContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      test: "",
+      txTargetAdress: "",
+      txValue: "",
     };
   }
+
+  componentDidMount() {
+    this.handleTransaction = this.handleTransaction.bind(this);
+  }
+
+  handleTxTargetChange = (e) => {
+    this.setState({ txTargetAdress: e.target.value });
+  };
+
+  handleTxValueChange = (e) => {
+    this.setState({ txValue: e.target.value });
+  };
+
+  handleTransaction = async () => {
+    debugger;
+    this.setState({ txValue: "" });
+  };
 
   render() {
     return (
@@ -43,24 +63,29 @@ export default class SendContainer extends Component {
               <StyledInnerContainer>
                 <div class="form-group" />
                 <label for="exampleInputEmail1">Adresse </label>
-                <input
-                  type="betrag"
+                <FormControl
                   class="form-control"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
-                  placeholder="adresse eingeben"
+                  placeholder="Adresse eingeben"
+                  value={this.state.txTargetAdress}
+                  onChange={this.handleTxTargetChange}
                 />
                 <div class="form-group" />
                 <label for="exampleInputEmail1">Betrag </label>
-                <input
-                  type="betrag"
+                <FormControl
+                  type="number"
                   class="form-control"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
                   placeholder="Betrag eingeben"
+                  value={this.state.txValue}
+                  onChange={this.handleTxValueChange}
                 />
               </StyledInnerContainer>
-              <StyledButton type="button">bestätigen</StyledButton>
+              <StyledButton type="button" onClick={this.handleTransaction}>
+                bestätigen
+              </StyledButton>
             </div>
             <div label="Termin">
               <StyledInnerContainer>
