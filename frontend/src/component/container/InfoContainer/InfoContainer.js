@@ -133,7 +133,7 @@ export default class InfoContainer extends Component {
 
     const { Bank } = this.props.drizzleState.contracts;
     const ownBalanceResponse = Bank.getOwnBalance[this.state.ownBalanceDataKey];
-    const ownBalance = ownBalanceResponse && ownBalanceResponse.value[0];
+    const ownBalance = ownBalanceResponse && ownBalanceResponse.value;
 
     return (
       <StyledContainer>
