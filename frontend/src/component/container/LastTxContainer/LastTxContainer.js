@@ -132,6 +132,17 @@ export default class InfoContainer extends Component {
     this.setState({ ownBalanceDataKey });
   }
 
+  formatEth(e) {
+    var value = parseInt(e);
+    if (value < 1000000000) {
+      return value + " wei";
+    } else if (value < 1000000000000000) {
+      return (value / 1000000000).toFixed(3) + " Gwei";
+    } else {
+      return (value / 1000000000000000000).toFixed(3) + "Eth";
+    }
+  }
+
   render() {
     const { Bank } = this.props.drizzleState.contracts;
     const ownBalanceResponse = Bank.getOwnBalance[this.state.ownBalanceDataKey];
@@ -151,7 +162,7 @@ export default class InfoContainer extends Component {
             <table style={tableStyle}>
               <tr>
                 <th style={thStyle}>Guthaben</th>
-                <td>{ownBalance}</td>
+                <td>{this.formatEth(ownBalance)}</td>
               </tr>
             </table>
             <FormControl
