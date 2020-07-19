@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { Container, Header, Divider } from "../Container";
 import styled from "styled-components";
-import {Button, Form, FormControl, ToggleButtonGroup, ToggleButton} from "react-bootstrap";
+import {
+  Button,
+  Form,
+  FormControl,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "react-bootstrap";
 
 const StyledContainer = styled(Container)`
   color: #e6e6fa;
@@ -21,7 +27,7 @@ const Content = styled.div`
 const tableStyle = {
   width: "100%",
   height: "80%",
-  marginBottom: "20px"
+  marginBottom: "20px",
 };
 
 const thStyle = {
@@ -31,9 +37,9 @@ const thStyle = {
 export default class InfoContainer extends Component {
   state = {
     transactionMode: 1,
-    transactionValue: '',
+    transactionValue: "",
     transactionValueInvalid: true,
-    ownBalanceDataKey: null
+    ownBalanceDataKey: null,
   };
 
   componentDidMount() {
@@ -43,83 +49,81 @@ export default class InfoContainer extends Component {
     this.deposit = this.deposit.bind(this);
 
     this.getOwnBalance();
-
   }
 
-  setTransactionMode(mode){
+  setTransactionMode(mode) {
     //1 = einzahlen
     //2 = auszahlen
 
     this.setState({ transactionMode: mode });
   }
 
-  handleInputChange = e => {
-    this.setState({transactionValue: e.target.value})
+  handleInputChange = (e) => {
+    this.setState({ transactionValue: e.target.value });
     var validation = {
-      isNumber:function(str) {
+      isNumber: function (str) {
         var pattern = /^\d+$/;
-        return pattern.test(str);  // returns a boolean
-      }
+        return pattern.test(str); // returns a boolean
+      },
     };
-    if(validation.isNumber(e.target.value)) {
-      this.setState({transactionValueInvalid: false});
-    }else{
+    if (validation.isNumber(e.target.value)) {
+      this.setState({ transactionValueInvalid: false });
+    } else {
       this.setState({ transactionValueInvalid: true });
     }
   };
 
-  handleAmountChanged = (e) =>{
-    this.setState({ transactionValue: e.target.value});
+  handleAmountChanged = (e) => {
+    this.setState({ transactionValue: e.target.value });
     var newValue = e.target.value;
     var validation = {
-      isNumber:function(str) {
+      isNumber: function (str) {
         var pattern = /^\d+$/;
-        return pattern.test(str);  // returns a boolean
-      }
+        return pattern.test(str); // returns a boolean
+      },
     };
-    if(validation.isNumber(newValue)) {
-      this.setState({transactionValueInvalid: false});
-    }else{
+    if (validation.isNumber(newValue)) {
+      this.setState({ transactionValueInvalid: false });
+    } else {
       this.setState({ transactionValueInvalid: true });
     }
-  }
-
+  };
 
   handleTransaction = async () => {
-    if(this.state.transactionValueInvalid){
+    if (this.state.transactionValueInvalid) {
       console.log("Invalid input for transcation");
       return;
     }
-    if(this.state.transactionMode == 1){
+    if (this.state.transactionMode === 1) {
       await this.deposit();
-    }else if(this.state.transactionMode == 2){
+    } else if (this.state.transactionMode === 2) {
       await this.withdraw();
     }
-    this.setState({ transactionValue: '' });
+    this.setState({ transactionValue: "" });
     this.setState({ transactionValueInvalid: true });
     this.getOwnBalance();
   };
 
-
-
-  deposit () {
+  deposit() {
     const { transactionValue } = this.state;
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Bank;
     console.log("Deposit " + transactionValue);
-    contract.methods["deposit"].cacheSend({value: transactionValue, from: drizzleState.accounts[0]});
+    contract.methods["deposit"].cacheSend({
+      value: transactionValue,
+      from: drizzleState.accounts[0],
+    });
   }
-
 
   withdraw = async () => {
     console.log("Withdraw " + this.state.transactionValue);
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Bank;
 
-    contract.methods["withdraw"].cacheSend({from: drizzleState.accounts[0]});
+    contract.methods["withdraw"].cacheSend({ from: drizzleState.accounts[0] });
   };
 
-  getOwnBalance(){
+  getOwnBalance() {
     const { drizzle } = this.props;
     const contract = drizzle.contracts.Bank;
 
@@ -128,9 +132,7 @@ export default class InfoContainer extends Component {
     this.setState({ ownBalanceDataKey });
   }
 
-
   render() {
-
     const { Bank } = this.props.drizzleState.contracts;
     const ownBalanceResponse = Bank.getOwnBalance[this.state.ownBalanceDataKey];
     const ownBalance = ownBalanceResponse && ownBalanceResponse.value;
@@ -152,12 +154,43 @@ export default class InfoContainer extends Component {
                 <td>{ownBalance}</td>
               </tr>
             </table>
-            <FormControl style={{width: "50%", marginBottom: "10px"}} type="text" placeholder="Betrag" className="mr-sm-2" value={this.state.transactionValue} onChange={this.handleInputChange}/>
-            <ToggleButtonGroup style={{width: "calc(50% - 10px)", marginBottom: "10px"}} type="radio" name="options" defaultValue={1}>
-              <ToggleButton value={1} variant="outline-light" onChange={(e) => this.setTransactionMode(e.currentTarget.value)}>Einzahlen</ToggleButton>
-              <ToggleButton value={2} variant="outline-light" onChange={(e) => this.setTransactionMode(e.currentTarget.value)}>Auszahlen</ToggleButton>
+            <FormControl
+              style={{ width: "50%", marginBottom: "10px" }}
+              type="text"
+              placeholder="Betrag"
+              className="mr-sm-2"
+              value={this.state.transactionValue}
+              onChange={this.handleInputChange}
+            />
+            <ToggleButtonGroup
+              style={{ width: "calc(50% - 10px)", marginBottom: "10px" }}
+              type="radio"
+              name="options"
+              defaultValue={1}
+            >
+              <ToggleButton
+                value={1}
+                variant="outline-light"
+                onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
+              >
+                Einzahlen
+              </ToggleButton>
+              <ToggleButton
+                value={2}
+                variant="outline-light"
+                onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
+              >
+                Auszahlen
+              </ToggleButton>
             </ToggleButtonGroup>
-            <Button variant="outline-light" disabled={this.state.transactionValueInvalid} onClick={this.handleTransaction} block>Bestätigen</Button>
+            <Button
+              variant="outline-light"
+              disabled={this.state.transactionValueInvalid}
+              onClick={this.handleTransaction}
+              block
+            >
+              Bestätigen
+            </Button>
           </Form>
         </Content>
       </StyledContainer>
