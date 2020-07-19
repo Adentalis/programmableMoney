@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import { Container, Header, Divider } from "../Container";
 import styled from "styled-components";
@@ -10,7 +9,6 @@ const StyledContainer = styled(Container)`
   height: calc(55% - 200px);
   margin: 80px 100px 100px 100px;
 `;
-
 
 const Content = styled.div`
   position: relative;
@@ -30,11 +28,11 @@ const thStyle = {
 };
 
 export default class LastTxContainer extends Component {
-  state = { 
-    dataKey: null,       
+  state = {
+    dataKey: null,
     date: "gestern",
     address: "Weihnachtsmann",
-    value: "4Millionen ETH", 
+    value: "4Millionen ETH",
   };
 
   componentDidMount() {
@@ -46,13 +44,24 @@ export default class LastTxContainer extends Component {
     this.setState({ dataKey });
   }
 
-  render() {
+  formatEth(e) {
+    var value = parseInt(e);
+    if (value < 1000000000) {
+      return value + " wei";
+    } else if (value < 1000000000000000) {
+      return (value / 1000000000).toFixed(3) + " Gwei";
+    } else {
+      return (value / 1000000000000000000).toFixed(3) + "Eth";
+    }
+  }
 
+  render() {
     const { Bank } = this.props.drizzleState.contracts;
     const storedData = Bank.getLastTransaction[this.state.dataKey];
+    const date = storedData && storedData.value[2];
+    var localDateTime = new Date(1000 * parseInt(date)).toLocaleString();
     const address = storedData && storedData.value[0];
-    const date = storedData && storedData.value[1];
-    const value = storedData && storedData.value[2];
+    const value = storedData && storedData.value[1];
 
     return (
       <StyledContainer>
@@ -62,7 +71,7 @@ export default class LastTxContainer extends Component {
           <table style={tableStyle}>
             <tr>
               <th style={thStyle}>Datum</th>
-              <td>{date}</td>
+              <td>{localDateTime}</td>
             </tr>
             <tr>
               <th style={thStyle}>Adresse</th>
@@ -70,7 +79,7 @@ export default class LastTxContainer extends Component {
             </tr>
             <tr>
               <th style={thStyle}>Betrag</th>
-              <td>{value}</td>
+              <td>{this.formatEth(value)}</td>
             </tr>
           </table>
         </Content>
