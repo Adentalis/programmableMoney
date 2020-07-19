@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Container, Header, Divider } from "../Container";
 import styled from "styled-components";
 
+import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
+
 const StyledContainer = styled(Container)`
   color: #e6e6fa;
   position: relative;
@@ -30,9 +32,7 @@ const thStyle = {
 export default class LastTxContainer extends Component {
   state = {
     dataKey: null,
-    date: "gestern",
-    address: "Weihnachtsmann",
-    value: "4Millionen ETH",
+    transactionMode: "send",
   };
 
   componentDidMount() {
@@ -55,6 +55,10 @@ export default class LastTxContainer extends Component {
     }
   }
 
+  setTransactionMode(mode) {
+    this.setState({ transactionMode: mode });
+  }
+
   render() {
     const { Bank } = this.props.drizzleState.contracts;
     const storedData = Bank.getLastTransaction[this.state.dataKey];
@@ -65,7 +69,30 @@ export default class LastTxContainer extends Component {
 
     return (
       <StyledContainer>
-        <Header>Letzte Transaktion</Header>
+        <Header>
+          Letzte Transaktion{" "}
+          <ToggleButtonGroup
+            style={{ width: "calc(50% - 10px)", marginBottom: "10px" }}
+            type="radio"
+            name="options"
+            defaultValue={"sendTx"}
+          >
+            <ToggleButton
+              value={"sendTx"}
+              variant="outline-light"
+              onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
+            >
+              Erhaltene
+            </ToggleButton>
+            <ToggleButton
+              value={"receivedTx"}
+              variant="outline-light"
+              onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
+            >
+              Versendete
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Header>
         <Divider />
         <Content>
           <table style={tableStyle}>
