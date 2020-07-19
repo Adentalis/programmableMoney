@@ -48,9 +48,19 @@ export default class SendContainer extends Component {
   };
 
   handleTransaction = async () => {
-    debugger;
-    this.setState({ txValue: "" });
+    await this.sendMoney();
   };
+
+  sendMoney() {
+    const { txValue } = this.state;
+    const { txTargetAdress } = this.state;
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.Bank;
+    console.log("sendMoney " + txValue + " - " + txTargetAdress);
+    contract.methods["sendMoney"].cacheSend(txTargetAdress, txValue, {
+      from: drizzleState.accounts[0],
+    });
+  }
 
   render() {
     return (
