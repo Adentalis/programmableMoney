@@ -75,11 +75,11 @@ class App extends Component {
                 </Switch>
               </div>
               <div className="right">
-                <LastTxContainer
+                <InfoContainer
                   drizzle={this.props.drizzle}
                   drizzleState={this.state.drizzleState}
                 />
-                <InfoContainer
+                <LastTxContainer
                   drizzle={this.props.drizzle}
                   drizzleState={this.state.drizzleState}
                 />
