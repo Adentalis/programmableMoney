@@ -32,7 +32,7 @@ const thStyle = {
 export default class LastTxContainer extends Component {
   state = {
     dataKey: null,
-    transactionMode: "send",
+    transactionMode: "lastSendTx",
   };
 
   componentDidMount() {
@@ -66,6 +66,9 @@ export default class LastTxContainer extends Component {
     const address = storedData && storedData.value[0];
     const value = storedData && storedData.value[1];
 
+    const state = this.state.transactionMode;
+    debugger;
+
     return (
       <StyledContainer>
         <Header>
@@ -74,17 +77,17 @@ export default class LastTxContainer extends Component {
             style={{ width: "calc(50% - 10px)", marginBottom: "10px" }}
             type="radio"
             name="options"
-            defaultValue={"sendTx"}
+            defaultValue={"lastSendTx"}
           >
             <ToggleButton
-              value={"sendTx"}
+              value={"lastSendTx"}
               variant="outline-light"
               onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
             >
               Erhaltene
             </ToggleButton>
             <ToggleButton
-              value={"receivedTx"}
+              value={"lastReceivedTx"}
               variant="outline-light"
               onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
             >
@@ -93,24 +96,25 @@ export default class LastTxContainer extends Component {
           </ToggleButtonGroup>
         </Header>
         <Divider />
-        <Content>
-          <table style={tableStyle}>
-            <tr>
-              <th style={thStyle}>Datum</th>
-              <td>{localDateTime}</td>
-            </tr>
-            <tr>
-              <th style={thStyle}>Adresse</th>
-              <td>{address}</td>
-            </tr>
-            <tr>
-              <th style={thStyle}>Betrag</th>
-              <td>{this.formatEth(value)}</td>
-            </tr>
-          </table>
-        </Content>
+        {state === "lastSendTx" && (
+          <Content>
+            <table style={tableStyle}>
+              <tr>
+                <th style={thStyle}>Datum</th>
+                <td>{localDateTime}</td>
+              </tr>
+              <tr>
+                <th style={thStyle}>Adresse</th>
+                <td>{address}</td>
+              </tr>
+              <tr>
+                <th style={thStyle}>Betrag</th>
+                <td>{this.formatEth(value)}</td>
+              </tr>
+            </table>
+          </Content>
+        )}
       </StyledContainer>
     );
   }
 }
-
