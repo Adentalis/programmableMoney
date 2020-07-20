@@ -97,15 +97,15 @@ export default class LastTxContainer extends Component {
 
     if (state === "lastReceivedTx") {
       date = lastReceivedTx && lastReceivedTx.value[2];
-      localDateTime = new Date(1000 * parseInt(date)).toLocaleString();
       address = lastReceivedTx && lastReceivedTx.value[0];
       value = lastReceivedTx && lastReceivedTx.value[1];
     } else {
       date = lastSendTx && lastSendTx.value[2];
-      localDateTime = new Date(1000 * parseInt(date)).toLocaleString();
       address = lastSendTx && lastSendTx.value[0];
       value = lastSendTx && lastSendTx.value[1];
     }
+    localDateTime = new Date(1000 * parseInt(date)+ 3600000).toLocaleString();
+
 
     return (
       <Content>
