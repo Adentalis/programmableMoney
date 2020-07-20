@@ -4,7 +4,8 @@ contract Bank {
     mapping(address => uint256) balances;
     mapping(address => uint256) freezeEnd;
     mapping(address => string) messages;
-    mapping(address => Transaction) lastTransaction;
+    mapping(address => Transaction) lastReceivedTransaction;
+    mapping(address => Transaction) lastSendTransaction;
 
     /* TODO
     - modifier für isMoneyFreezed & receiverNotSender
@@ -14,6 +15,7 @@ contract Bank {
 
     struct Transaction {
         address sender;
+        address receiver;
         uint256 value;
         uint256 time;
     }
@@ -35,8 +37,17 @@ contract Bank {
         require(_address != msg.sender);
         balances[msg.sender] -= _value;
         balances[_address] += _value;
-        lastTransaction[_address] = Transaction(
+
+        lastSendTransaction[msg.sender] = Transaction(
             msg.sender,
+            _address,
+            _value,
+            getCurrentTime()
+        );
+
+        lastReceivedTransaction[_address] = Transaction(
+            msg.sender,
+            _address,
             _value,
             getCurrentTime()
         );
@@ -74,7 +85,7 @@ contract Bank {
         return messages[msg.sender];
     }
 
-    function getLastTransaction()
+    function getLastReceivedTransaction()
         public
         view
         returns (
@@ -84,9 +95,25 @@ contract Bank {
         )
     {
         return (
-            lastTransaction[msg.sender].sender,
-            lastTransaction[msg.sender].value,
-            lastTransaction[msg.sender].time
+            lastReceivedTransaction[msg.sender].sender,
+            lastReceivedTransaction[msg.sender].value,
+            lastReceivedTransaction[msg.sender].time
+        );
+    }
+
+    function getLastSendTransaction()
+        public
+        view
+        returns (
+            address,
+            uint256,
+            uint256
+        )
+    {
+        return (
+            lastSendTransaction[msg.sender].receiver,
+            lastSendTransaction[msg.sender].value,
+            lastSendTransaction[msg.sender].time
         );
     }
 }
