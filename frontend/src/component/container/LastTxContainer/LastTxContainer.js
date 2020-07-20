@@ -31,16 +31,23 @@ const thStyle = {
 
 export default class LastTxContainer extends Component {
   state = {
-    dataKey: null,
-    transactionMode: "lastSendTx",
+    lastReceivedTxKey: null,
+    lastSendTxKey: null,
+    transactionMode: "lastReceivedTx",
   };
 
   componentDidMount() {
     const { drizzle } = this.props;
     const contract = drizzle.contracts.Bank;
     // get and save the key for the variable we are interested in
-    const dataKey = contract.methods["getLastTransaction"].cacheCall();
-    this.setState({ dataKey });
+    const lastReceivedTxKey = contract.methods[
+      "getLastReceivedTransaction"
+    ].cacheCall();
+    this.setState({ lastReceivedTxKey });
+    const lastSendTxKey = contract.methods[
+      "getLastSendTransaction"
+    ].cacheCall();
+    this.setState({ lastSendTxKey });
   }
 
   formatEth(e) {
@@ -58,17 +65,68 @@ export default class LastTxContainer extends Component {
     this.setState({ transactionMode: mode });
   }
 
-  render() {
+  createContent() {
     const { Bank } = this.props.drizzleState.contracts;
-    const storedData = Bank.getLastTransaction[this.state.dataKey];
-    const date = storedData && storedData.value[2];
-    var localDateTime = new Date(1000 * parseInt(date)).toLocaleString();
-    const address = storedData && storedData.value[0];
-    const value = storedData && storedData.value[1];
-
+    const lastReceivedTx =
+      Bank.getLastReceivedTransaction[this.state.lastReceivedTxKey];
+    const lastSendTx = Bank.getLastSendTransaction[this.state.lastSendTxKey];
     const state = this.state.transactionMode;
-    debugger;
 
+    //check if user has sent a tx
+    let isLastReceivedTx = false;
+    if (lastReceivedTx && lastReceivedTx.value[1] !== "0")
+      isLastReceivedTx = true;
+
+    if (state === "lastReceivedTx" && !isLastReceivedTx) {
+      return <h3>Sie haben noch keine Transaktion erhalten!</h3>;
+    }
+
+    //check if user has received a tx
+    let isLastSendTx = false;
+    if (lastSendTx && lastSendTx.value[1] !== "0") isLastSendTx = true;
+
+    if (state === "lastSendTx" && !isLastSendTx) {
+      return <h3>Sie haben noch keine Transaktion versendet!</h3>;
+    }
+
+    //show either lastSend or lastReceived tx
+    let date;
+    let address;
+    let value;
+
+    if (state === "lastReceivedTx") {
+      date = lastReceivedTx && lastReceivedTx.value[2];
+      var localDateTime = new Date(1000 * parseInt(date)).toLocaleString();
+      address = lastReceivedTx && lastReceivedTx.value[0];
+      value = lastReceivedTx && lastReceivedTx.value[1];
+    } else {
+      date = lastSendTx && lastSendTx.value[2];
+      var localDateTime = new Date(1000 * parseInt(date)).toLocaleString();
+      address = lastSendTx && lastSendTx.value[0];
+      value = lastSendTx && lastSendTx.value[1];
+    }
+
+    return (
+      <Content>
+        <table style={tableStyle}>
+          <tr>
+            <th style={thStyle}>Datum</th>
+            <td>{localDateTime}</td>
+          </tr>
+          <tr>
+            <th style={thStyle}>Adresse</th>
+            <td>{address}</td>
+          </tr>
+          <tr>
+            <th style={thStyle}>Betrag</th>
+            <td>{this.formatEth(value)}</td>
+          </tr>
+        </table>
+      </Content>
+    );
+  }
+
+  render() {
     return (
       <StyledContainer>
         <Header>
@@ -77,17 +135,17 @@ export default class LastTxContainer extends Component {
             style={{ width: "calc(50% - 10px)", marginBottom: "10px" }}
             type="radio"
             name="options"
-            defaultValue={"lastSendTx"}
+            defaultValue={"lastReceivedTx"}
           >
             <ToggleButton
-              value={"lastSendTx"}
+              value={"lastReceivedTx"}
               variant="outline-light"
               onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
             >
               Erhaltene
             </ToggleButton>
             <ToggleButton
-              value={"lastReceivedTx"}
+              value={"lastSendTx"}
               variant="outline-light"
               onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
             >
@@ -96,24 +154,7 @@ export default class LastTxContainer extends Component {
           </ToggleButtonGroup>
         </Header>
         <Divider />
-        {state === "lastSendTx" && (
-          <Content>
-            <table style={tableStyle}>
-              <tr>
-                <th style={thStyle}>Datum</th>
-                <td>{localDateTime}</td>
-              </tr>
-              <tr>
-                <th style={thStyle}>Adresse</th>
-                <td>{address}</td>
-              </tr>
-              <tr>
-                <th style={thStyle}>Betrag</th>
-                <td>{this.formatEth(value)}</td>
-              </tr>
-            </table>
-          </Content>
-        )}
+        {this.createContent()}
       </StyledContainer>
     );
   }
