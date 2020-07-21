@@ -164,7 +164,6 @@ export default class InfoContainer extends Component {
     const lastBlock = new Date(1000* parseInt(blockchainTime));
     var secondsSinceLastBlock = Math.round(((now - lastBlock) / 1000) - 3600);
 
-    debugger;
     return (
       <StyledContainer>
         <Header>Bankosolo</Header>
