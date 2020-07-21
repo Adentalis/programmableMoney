@@ -40,6 +40,9 @@ export default class InfoContainer extends Component {
     transactionValue: "",
     transactionValueInvalid: true,
     ownBalanceDataKey: null,
+    ownFreeTimeDataKey: null,
+    blockchainTime: null,
+
   };
 
   componentDidMount() {
@@ -47,8 +50,7 @@ export default class InfoContainer extends Component {
     this.handleTransaction = this.handleTransaction.bind(this);
     this.withdraw = this.withdraw.bind(this);
     this.deposit = this.deposit.bind(this);
-
-    this.getOwnBalance();
+    this.getKeys();
   }
 
   setTransactionMode(mode) {
@@ -101,7 +103,7 @@ export default class InfoContainer extends Component {
     }
     this.setState({ transactionValue: "" });
     this.setState({ transactionValueInvalid: true });
-    this.getOwnBalance();
+    this.getKeys();
   };
 
   deposit() {
@@ -123,13 +125,17 @@ export default class InfoContainer extends Component {
     contract.methods["withdraw"].cacheSend({ from: drizzleState.accounts[0] });
   };
 
-  getOwnBalance() {
+  getKeys() {
     const { drizzle } = this.props;
     const contract = drizzle.contracts.Bank;
 
     // get and save the key for the variable we are interested in
     const ownBalanceDataKey = contract.methods["getOwnBalance"].cacheCall();
     this.setState({ ownBalanceDataKey });
+    const ownFreeTimeDataKey = contract.methods["getOwnFreezeEnd"].cacheCall();
+    this.setState({ ownFreeTimeDataKey });
+    const blockchainTime = contract.methods["getCurrentTime"].cacheCall();
+    this.setState({ blockchainTime });
   }
 
   formatEth(e) {
@@ -148,20 +154,34 @@ export default class InfoContainer extends Component {
     const ownBalanceResponse = Bank.getOwnBalance[this.state.ownBalanceDataKey];
     const ownBalance = ownBalanceResponse && ownBalanceResponse.value;
 
+    const ownFreezeTimeResponse = Bank.getOwnFreezeEnd[this.state.ownFreeTimeDataKey];
+    const ownFreezeTime = ownFreezeTimeResponse && ownFreezeTimeResponse.value;
+
+    const blockchainTimeResponse = Bank.getCurrentTime[this.state.blockchainTime];
+    const blockchainTime = blockchainTimeResponse && blockchainTimeResponse.value;
+
+    const now = new Date();
+    const lastBlock = new Date(1000* parseInt(blockchainTime));
+    var secondsSinceLastBlock = Math.round(((now - lastBlock) / 1000) - 3600);
+
+    debugger;
     return (
       <StyledContainer>
         <Header>Bankosolo</Header>
         <Divider />
         <Content>
-          {/*}
-          <div>{this.state.transactionMode}</div>
-          <div>{this.state.transactionValue}</div>
-          */}
           <Form inline>
-            {/*<div>{this.state.transactionMode}</div>*/}
             <table style={tableStyle}>
               <tr>
-                <th style={thStyle}>Guthaben</th>
+                <th style={thStyle}>Letzter Block vor: </th>
+                <td>{secondsSinceLastBlock} Sekunden </td>
+              </tr>
+              <tr>
+                <th style={thStyle}>Geld eingefroren bis:</th>
+                <td>{ownFreezeTime}</td>
+              </tr>
+              <tr>
+                <th style={thStyle}>Guthaben: </th>
                 <td>{this.formatEth(ownBalance)}</td>
               </tr>
             </table>
