@@ -1,15 +1,12 @@
 pragma solidity >=0.4.21 <0.7.0;
 
 contract Bank {
+    /*--------------------------------
+            MONEY SECTION
+    --------------------------------*/
     mapping(address => uint256) balances;
-    mapping(address => uint256) freezeEnd;
-    mapping(address => string) messages;
     mapping(address => Transaction) lastReceivedTransaction;
     mapping(address => Transaction) lastSendTransaction;
-
-    /* TODO
-    - modifier für isMoneyFreezed & receiverNotSender
-    */
 
     event NewTransaction(address sender, address receiver, uint256 value);
 
@@ -38,51 +35,21 @@ contract Bank {
         balances[msg.sender] -= _value;
         balances[_address] += _value;
 
-        lastSendTransaction[msg.sender] = Transaction(
+        Transaction memory transaction = Transaction(
             msg.sender,
             _address,
             _value,
             getCurrentTime()
         );
 
-        lastReceivedTransaction[_address] = Transaction(
-            msg.sender,
-            _address,
-            _value,
-            getCurrentTime()
-        );
+        lastSendTransaction[msg.sender] = transaction;
+        lastReceivedTransaction[_address] = transaction;
+
         emit NewTransaction(msg.sender, _address, _value);
     }
 
-    function freezeMoney(uint256 _timeToFreeze) public {
-        require(balances[msg.sender] > 0);
-        freezeEnd[msg.sender] = now + _timeToFreeze;
-    }
-
-    function sendMessage(string memory _message, address _address) public {
-        require(bytes(_message).length > 0);
-        require(_address != msg.sender);
-        messages[_address] = _message;
-    }
-
-    /*
-    READ-ONLY(view) functions --------------------------------------------------
-    */
-
     function getOwnBalance() public view returns (uint256) {
         return balances[msg.sender];
-    }
-
-    function getOwnFreezeEnd() public view returns (uint256) {
-        return freezeEnd[msg.sender];
-    }
-
-    function getCurrentTime() public view returns (uint256) {
-        return now;
-    }
-
-    function getMessage() public view returns (string memory) {
-        return messages[msg.sender];
     }
 
     function getLastReceivedTransaction()
@@ -115,5 +82,93 @@ contract Bank {
             lastSendTransaction[msg.sender].value,
             lastSendTransaction[msg.sender].time
         );
+    }
+
+    /*--------------------------------
+            MESSAGE SECTION
+    --------------------------------*/
+
+    mapping(address => Message[5]) messagesSend;
+    mapping(address => Message[5]) messagesReceived;
+
+    mapping(address => uint256) messagesSendCounter;
+    mapping(address => uint256) messagesReceivedCounter;
+
+    struct Message {
+        address sender;
+        address receiver;
+        string message;
+        uint256 time;
+    }
+
+    function sendMessage(string memory _message, address _address) public {
+        require(bytes(_message).length > 0);
+        require(_address != msg.sender);
+
+        Message memory message = Message(
+            msg.sender,
+            _address,
+            _message,
+            getCurrentTime()
+        );
+
+        messagesSend[msg.sender][messagesSendCounter[msg.sender] % 5] = message;
+        messagesSendCounter[msg.sender] += 1;
+
+        messagesReceived[_address][messagesReceivedCounter[msg.sender] %
+            5] = message;
+        messagesReceivedCounter[msg.sender] += 1;
+    }
+
+    function getSendMessages(uint256 _position)
+        public
+        view
+        returns (
+            address,
+            string memory,
+            uint256
+        )
+    {
+        require(_position >= 0 && _position <= 5);
+        return (
+            messagesSend[msg.sender][_position].receiver,
+            messagesSend[msg.sender][_position].message,
+            messagesSend[msg.sender][_position].time
+        );
+    }
+
+    function getReceivedMessages(uint256 _position)
+        public
+        view
+        returns (
+            address,
+            string memory,
+            uint256
+        )
+    {
+        require(_position >= 0 && _position <= 5);
+        return (
+            messagesReceived[msg.sender][_position].sender,
+            messagesReceived[msg.sender][_position].message,
+            messagesReceived[msg.sender][_position].time
+        );
+    }
+
+    /*
+    HELPER FUNCTIONS
+    */
+    mapping(address => uint256) freezeEnd;
+
+    function getOwnFreezeEnd() public view returns (uint256) {
+        return freezeEnd[msg.sender];
+    }
+
+    function freezeMoney(uint256 _timeToFreeze) public {
+        require(balances[msg.sender] > 0);
+        freezeEnd[msg.sender] = now + _timeToFreeze;
+    }
+
+    function getCurrentTime() public view returns (uint256) {
+        return now;
     }
 }
