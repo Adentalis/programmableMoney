@@ -17,14 +17,15 @@ export default class MessageContainer extends Component {
     this.state = {
       newMessageText: "",
       newMessageReceiver: "",
-      sendMessageKey: null,
-      getSendMessagesKey: null,
-      getReceivedMessagesKey: null,
+      getSendMessagesKey: [],
+      getReceivedMessagesKey: [],
     };
 
     this.handleMessageText = this.handleMessageText.bind(this);
     this.handleReceiverAdress = this.handleReceiverAdress.bind(this);
     this.submitMessage = this.submitMessage.bind(this);
+
+    this.MAXIMUM_MESSAGES = 5;
   }
 
   componentDidMount() {
@@ -33,15 +34,15 @@ export default class MessageContainer extends Component {
 
     //init the 5 sendMessages
     let getSendMessagesKey = [];
-    for (let i = 0; i <= 4; i++) {
-      getSendMessagesKey = contract.methods["getSendMessages"].cacheCall(i);
+    for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
+      getSendMessagesKey[i] = contract.methods["getSendMessages"].cacheCall(i);
     }
     this.setState({ getSendMessagesKey });
 
     //init the 5 sendMessages
     let getReceivedMessagesKey = [];
-    for (let i = 0; i <= 4; i++) {
-      getReceivedMessagesKey = contract.methods[
+    for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
+      getReceivedMessagesKey[i] = contract.methods[
         "getReceivedMessages"
       ].cacheCall(i);
     }
@@ -69,6 +70,87 @@ export default class MessageContainer extends Component {
     );
   }
 
+  createSendMessagesContent() {
+    const { Bank } = this.props.drizzleState.contracts;
+
+    //load the messages from the SC
+    const lastMessage = [];
+    for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
+      lastMessage[i] = Bank.getSendMessages[this.state.getSendMessagesKey[i]];
+    }
+
+    //wait for all MessagesLoaded
+    if (this.allMessagesLoaded(lastMessage)) {
+      return lastMessage.map((message, index) => (
+        <div key={index}>
+          <table>
+            <tr>
+              <th>Datum</th>
+              <td>
+                {new Date(
+                  1000 * parseInt(message.value[2]) + 3600000
+                ).toLocaleString()}
+              </td>
+            </tr>
+            <tr>
+              <th>Adresse</th>
+              <td>{message.value[0]}</td>
+            </tr>
+            <tr>
+              <th>Nachricht</th>
+              <td>{message.value[1]}</td>
+            </tr>
+          </table>
+          ---------------
+        </div>
+      ));
+    }
+  }
+
+  createReceivedMessagesContent() {
+    const { Bank } = this.props.drizzleState.contracts;
+
+    //load the messages from the SC
+    const lastRecievedMessage = [];
+    for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
+      lastRecievedMessage[i] = Bank.getReceivedMessages[this.state.getReceivedMessagesKey[i]];
+    }
+
+    //wait for all MessagesLoaded
+    if (this.allMessagesLoaded(lastRecievedMessage)) {
+      return lastRecievedMessage.map((message, index) => (
+        <div key={index}>
+          <table>
+            <tr>
+              <th>Datum</th>
+              <td>
+                {new Date(
+                  1000 * parseInt(message.value[2]) + 3600000
+                ).toLocaleString()}
+              </td>
+            </tr>
+            <tr>
+              <th>Adresse</th>
+              <td>{message.value[0]}</td>
+            </tr>
+            <tr>
+              <th>Nachricht</th>
+              <td>{message.value[1]}</td>
+            </tr>
+          </table>
+          ---------------
+        </div>
+      ));
+    }
+  }
+
+  allMessagesLoaded(messages) {
+    for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
+      if (messages[i] === undefined) return false;
+    }
+    return true;
+  }
+
   render() {
     return (
       <Container>
@@ -76,8 +158,8 @@ export default class MessageContainer extends Component {
         <Divider />
         <Content>
           <Tabs>
-            <div label="Posteingang">test</div>
-            <div label="Postausgang">testr2323</div>
+            <div label="Posteingang">{this.createReceivedMessagesContent()}</div>
+            <div label="Postausgang">{this.createSendMessagesContent()}</div>
             <div label="Neu">
               <Textarea
                 placeholder="Ihre Nachricht..."
