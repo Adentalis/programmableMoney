@@ -115,9 +115,9 @@ contract Bank {
         messagesSend[msg.sender][messagesSendCounter[msg.sender] % 5] = message;
         messagesSendCounter[msg.sender] += 1;
 
-        messagesReceived[_address][messagesReceivedCounter[msg.sender] %
+        messagesReceived[_address][messagesReceivedCounter[_address] %
             5] = message;
-        messagesReceivedCounter[msg.sender] += 1;
+        messagesReceivedCounter[_address] += 1;
     }
 
     function getSendMessages(uint256 _position)
