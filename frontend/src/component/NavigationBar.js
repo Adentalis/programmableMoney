@@ -6,6 +6,7 @@ import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH, 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import image from "../Bankosolo.png";
 
 const Style = styled.div`
 .navbar { 
@@ -79,7 +80,7 @@ class NavigationBar extends Component {
       <Style>
         <Navbar collapseOnSelect expand="lg">
           <Navbar.Brand >
-            Logo
+          <img src={image} style={{width: 190, height: 45}} />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
