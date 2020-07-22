@@ -51,6 +51,7 @@ class App extends Component {
               drizzle={this.props.drizzle}
               drizzleState={this.state.drizzleState}
             />
+            <div className="background" />
             <div className="content">
               <div className="left">
                 <Switch unmountonblur="true">

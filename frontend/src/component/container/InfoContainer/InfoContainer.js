@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Header, Divider } from "../Container";
+import { Container, Header, Divider, Content } from "../Container";
 import styled from "styled-components";
 import {
   Button,
@@ -12,16 +12,10 @@ import {
 const StyledContainer = styled(Container)`
   color: #e6e6fa;
   position: relative;
-  width: calc(100% - 200px);
-  height: calc(55% - 200px);
-  margin: 100px 100px 100px 100px;
-`;
-
-const Content = styled.div`
-  position: relative;
-  width: 100%;
-  height: calc(100% - 80px);
-  font-size: x-large;
+  width: calc(100% - 100px);
+  height: calc(55% - 100px);
+  margin: 70px 50px 50px 50px;
+}
 `;
 
 const tableStyle = {
@@ -31,7 +25,7 @@ const tableStyle = {
 };
 
 const thStyle = {
-  width: "30%",
+  //Style for th
 };
 
 export default class InfoContainer extends Component {
@@ -184,7 +178,7 @@ export default class InfoContainer extends Component {
               </tr>
             </table>
             <FormControl
-              style={{ width: "50%", marginBottom: "10px" }}
+              style={{ width: "100%", marginBottom: "10px" }}
               type="text"
               placeholder="Betrag"
               className="mr-sm-2"
@@ -192,7 +186,7 @@ export default class InfoContainer extends Component {
               onChange={this.handleInputChange}
             />
             <ToggleButtonGroup
-              style={{ width: "calc(50% - 10px)", marginBottom: "10px" }}
+              style={{ width: "100%", marginBottom: "10px" }}
               type="radio"
               name="options"
               defaultValue={1}

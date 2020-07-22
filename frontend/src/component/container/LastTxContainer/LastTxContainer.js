@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Header, Divider } from "../Container";
+import { Container, Header, Divider, Content } from "../Container";
 import styled from "styled-components";
 
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
@@ -7,18 +7,11 @@ import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 const StyledContainer = styled(Container)`
   color: #e6e6fa;
   position: relative;
-  width: calc(100% - 200px);
-  height: calc(55% - 200px);
-  margin: 80px 100px 100px 100px;
+  width: calc(100% - 100px);
+  height: calc(55% - 100px);
+  margin: 50px 50px 50px 50px;
 `;
 
-const Content = styled.div`
-  position: relative;
-  width: 100%;
-  height: calc(100% - 80px);
-  padding: 20px;
-  font-size: x-large;
-`;
 
 const tableStyle = {
   width: "100%",
@@ -26,7 +19,7 @@ const tableStyle = {
 };
 
 const thStyle = {
-  width: "30%",
+  //Style for th
 };
 
 export default class LastTxContainer extends Component {
@@ -132,29 +125,29 @@ export default class LastTxContainer extends Component {
       <StyledContainer>
         <Header>
           Letzte Transaktion{" "}
-          <ToggleButtonGroup
-            style={{ width: "calc(50% - 10px)", marginBottom: "10px" }}
+        </Header>
+        <Divider />
+        <ToggleButtonGroup
+            style={{ width: "100%", marginBottom: "10px" }}
             type="radio"
             name="options"
             defaultValue={"lastReceivedTx"}
-          >
-            <ToggleButton
+        >
+          <ToggleButton
               value={"lastReceivedTx"}
               variant="outline-light"
               onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
-            >
-              Erhaltene
-            </ToggleButton>
-            <ToggleButton
+          >
+            Erhaltene
+          </ToggleButton>
+          <ToggleButton
               value={"lastSendTx"}
               variant="outline-light"
               onChange={(e) => this.setTransactionMode(e.currentTarget.value)}
-            >
-              Versendete
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Header>
-        <Divider />
+          >
+            Versendete
+          </ToggleButton>
+        </ToggleButtonGroup>
         {this.createContent()}
       </StyledContainer>
     );
