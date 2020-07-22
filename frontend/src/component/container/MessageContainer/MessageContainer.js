@@ -1,14 +1,9 @@
 import React, { Component } from "react";
 import Tabs from "../Tab/Tabs";
 import { NAVIGATION_MESSAGE_TEXT } from "../../../constants";
-import {
-  Container,
-  Header,
-  Divider,
-  Content,
-} from "../Container";
+import { Container, Header, Divider, Content } from "../Container";
 
-import { Form,Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 
 require("../textfield.css");
 
@@ -54,7 +49,7 @@ export default class MessageContainer extends Component {
 
   handleMessageText(e) {
     this.setState({ newMessageText: e.target.value });
-    if ((e.target.value).length > 0) {
+    if (e.target.value.length > 0) {
       this.setState({ newMessageTextInvalid: false });
     } else {
       this.setState({ newMessageTextInvalid: true });
@@ -69,7 +64,7 @@ export default class MessageContainer extends Component {
         return pattern.test(str); // returns a boolean
       },
     };
-    if (validation.isAddress(e.target.value) && (e.target.value).length == 42) {
+    if (validation.isAddress(e.target.value) && e.target.value.length == 42) {
       this.setState({ newMessageReceiverInvalid: false });
     } else {
       this.setState({ newMessageReceiverInvalid: true });
@@ -99,7 +94,8 @@ export default class MessageContainer extends Component {
     //load the messages from the SC
     const lastMessageSend = [];
     for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
-      lastMessageSend[i] = Bank.getSendMessages[this.state.getSendMessagesKey[i]];
+      lastMessageSend[i] =
+        Bank.getSendMessages[this.state.getSendMessagesKey[i]];
     }
 
     //wait for all MessagesLoaded
@@ -114,16 +110,29 @@ export default class MessageContainer extends Component {
     //load the messages from the SC
     const lastRecievedMessage = [];
     for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
-      lastRecievedMessage[i] = Bank.getReceivedMessages[this.state.getReceivedMessagesKey[i]];
+      lastRecievedMessage[i] =
+        Bank.getReceivedMessages[this.state.getReceivedMessagesKey[i]];
     }
     //wait for all MessagesLoaded
-    if (this.allMessagesLoaded(lastRecievedMessage)){
+    if (this.allMessagesLoaded(lastRecievedMessage)) {
       return this.createMessageContent(lastRecievedMessage);
     }
   }
 
-  createMessageContent(lastMessage){
-    return lastMessage.map((message, index) => (
+  sortMessagesByDate(messages) {
+    return messages.sort((messagesA, messagesB) => {
+      return messagesB.value[2] - messagesA.value[2];
+    });
+  }
+
+  createMessageContent(allMessages) {
+    //filter all Messages without data
+    let filledMessages = allMessages.filter(
+      (message) => message.value[1] !== ""
+    );
+    filledMessages = this.sortMessagesByDate(filledMessages);
+
+    return filledMessages.map((message, index) => (
       <div key={index}>
         <table>
           <tr>
@@ -162,18 +171,48 @@ export default class MessageContainer extends Component {
         <Divider />
         <Content>
           <Tabs>
-            <div label="Posteingang">{this.createReceivedMessagesContent()}</div>
+            <div label="Posteingang">
+              {this.createReceivedMessagesContent()}
+            </div>
             <div label="Postausgang">{this.createSendMessagesContent()}</div>
             <div label="Neu">
               <Form.Group controlId="newForm.AddressInput">
                 <Form.Label>Email address</Form.Label>
-                <Form.Control type="address" placeholder="0x0000000000000000000000000000000000000000" value={this.state.newMessageReceiver} onChange={this.handleReceiverAdress}/>
+                <Form.Control
+                  type="address"
+                  placeholder="0x0000000000000000000000000000000000000000"
+                  value={this.state.newMessageReceiver}
+                  onChange={this.handleReceiverAdress}
+                />
               </Form.Group>
               <Form.Group controlId="newForm.MessageInput">
                 <Form.Label>Example textarea</Form.Label>
-                <Form.Control style={{ position: "absolute", height: "calc(100% - 270px)", width: "calc(100% - 40px)", resize: "none"}} as="textarea" placeholder="Hier können Sie Ihre Nachricht eingeben..." value={this.state.newMessageText} onChange={this.handleMessageText}/>
+                <Form.Control
+                  style={{
+                    position: "absolute",
+                    height: "calc(100% - 270px)",
+                    width: "calc(100% - 40px)",
+                    resize: "none",
+                  }}
+                  as="textarea"
+                  placeholder="Hier können Sie Ihre Nachricht eingeben..."
+                  value={this.state.newMessageText}
+                  onChange={this.handleMessageText}
+                />
               </Form.Group>
-              <Button style={{ position: "absolute", width: "calc(100% - 40px)", bottom: "10px"}} variant="outline-light" disabled={this.state.newMessageReceiverInvalid || this.state.newMessageTextInvalid} onClick={this.submitMessage}>
+              <Button
+                style={{
+                  position: "absolute",
+                  width: "calc(100% - 40px)",
+                  bottom: "10px",
+                }}
+                variant="outline-light"
+                disabled={
+                  this.state.newMessageReceiverInvalid ||
+                  this.state.newMessageTextInvalid
+                }
+                onClick={this.submitMessage}
+              >
                 Senden
               </Button>
             </div>
