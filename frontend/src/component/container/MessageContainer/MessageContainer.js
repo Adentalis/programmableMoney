@@ -27,6 +27,27 @@ export default class MessageContainer extends Component {
     this.submitMessage = this.submitMessage.bind(this);
   }
 
+  componentDidMount() {
+    const { drizzle } = this.props;
+    const contract = drizzle.contracts.Bank;
+
+    //init the 5 sendMessages
+    let getSendMessagesKey = [];
+    for (let i = 0; i <= 4; i++) {
+      getSendMessagesKey = contract.methods["getSendMessages"].cacheCall(i);
+    }
+    this.setState({ getSendMessagesKey });
+
+    //init the 5 sendMessages
+    let getReceivedMessagesKey = [];
+    for (let i = 0; i <= 4; i++) {
+      getReceivedMessagesKey = contract.methods[
+        "getReceivedMessages"
+      ].cacheCall(i);
+    }
+    this.setState({ getReceivedMessagesKey });
+  }
+
   handleMessageText(e) {
     this.setState({ newMessageText: e.target.value });
   }
