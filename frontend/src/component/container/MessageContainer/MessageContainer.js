@@ -97,36 +97,14 @@ export default class MessageContainer extends Component {
     const { Bank } = this.props.drizzleState.contracts;
 
     //load the messages from the SC
-    const lastMessage = [];
+    const lastMessageSend = [];
     for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
-      lastMessage[i] = Bank.getSendMessages[this.state.getSendMessagesKey[i]];
+      lastMessageSend[i] = Bank.getSendMessages[this.state.getSendMessagesKey[i]];
     }
 
     //wait for all MessagesLoaded
-    if (this.allMessagesLoaded(lastMessage)) {
-      return lastMessage.map((message, index) => (
-        <div key={index}>
-          <table>
-            <tr>
-              <th>Datum</th>
-              <td>
-                {new Date(
-                  1000 * parseInt(message.value[2]) + 3600000
-                ).toLocaleString()}
-              </td>
-            </tr>
-            <tr>
-              <th>Adresse</th>
-              <td>{message.value[0]}</td>
-            </tr>
-            <tr>
-              <th>Nachricht</th>
-              <td>{message.value[1]}</td>
-            </tr>
-          </table>
-          ---------------
-        </div>
-      ));
+    if (this.allMessagesLoaded(lastMessageSend)) {
+      return this.createMessageContent(lastMessageSend);
     }
   }
 
@@ -138,33 +116,36 @@ export default class MessageContainer extends Component {
     for (let i = 0; i < this.MAXIMUM_MESSAGES; i++) {
       lastRecievedMessage[i] = Bank.getReceivedMessages[this.state.getReceivedMessagesKey[i]];
     }
-
     //wait for all MessagesLoaded
-    if (this.allMessagesLoaded(lastRecievedMessage)) {
-      return lastRecievedMessage.map((message, index) => (
-        <div key={index}>
-          <table>
-            <tr>
-              <th>Datum</th>
-              <td>
-                {new Date(
-                  1000 * parseInt(message.value[2]) + 3600000
-                ).toLocaleString()}
-              </td>
-            </tr>
-            <tr>
-              <th>Adresse</th>
-              <td>{message.value[0]}</td>
-            </tr>
-            <tr>
-              <th>Nachricht</th>
-              <td>{message.value[1]}</td>
-            </tr>
-          </table>
-          ---------------
-        </div>
-      ));
+    if (this.allMessagesLoaded(lastRecievedMessage)){
+      return this.createMessageContent(lastRecievedMessage);
     }
+  }
+
+  createMessageContent(lastMessage){
+    return lastMessage.map((message, index) => (
+      <div key={index}>
+        <table>
+          <tr>
+            <th>Datum</th>
+            <td>
+              {new Date(
+                1000 * parseInt(message.value[2]) + 3600000
+              ).toLocaleString()}
+            </td>
+          </tr>
+          <tr>
+            <th>Adresse</th>
+            <td>{message.value[0]}</td>
+          </tr>
+          <tr>
+            <th>Nachricht</th>
+            <td>{message.value[1]}</td>
+          </tr>
+        </table>
+        ---------------
+      </div>
+    ));
   }
 
   allMessagesLoaded(messages) {
