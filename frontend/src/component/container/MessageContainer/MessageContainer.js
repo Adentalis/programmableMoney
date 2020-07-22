@@ -6,9 +6,10 @@ import {
   Header,
   Divider,
   Content,
-  Button,
-  Textarea,
 } from "../Container";
+
+import { Form,Button } from "react-bootstrap";
+
 require("../textfield.css");
 
 export default class MessageContainer extends Component {
@@ -17,6 +18,8 @@ export default class MessageContainer extends Component {
     this.state = {
       newMessageText: "",
       newMessageReceiver: "",
+      newMessageReceiverInvalid: true,
+      newMessageTextInvalid: true,
       getSendMessagesKey: [],
       getReceivedMessagesKey: [],
     };
@@ -51,10 +54,26 @@ export default class MessageContainer extends Component {
 
   handleMessageText(e) {
     this.setState({ newMessageText: e.target.value });
+    if ((e.target.value).length > 0) {
+      this.setState({ newMessageTextInvalid: false });
+    } else {
+      this.setState({ newMessageTextInvalid: true });
+    }
   }
 
   handleReceiverAdress(e) {
     this.setState({ newMessageReceiver: e.target.value });
+    var validation = {
+      isAddress: function (str) {
+        var pattern = /^0x[a-f,0-9,A-F]+$/;
+        return pattern.test(str); // returns a boolean
+      },
+    };
+    if (validation.isAddress(e.target.value) && (e.target.value).length == 42) {
+      this.setState({ newMessageReceiverInvalid: false });
+    } else {
+      this.setState({ newMessageReceiverInvalid: true });
+    }
   }
 
   async submitMessage() {
@@ -68,6 +87,10 @@ export default class MessageContainer extends Component {
       this.state.newMessageReceiver,
       { from: drizzleState.accounts[0] }
     );
+    this.state.newMessageText = "";
+    this.state.newMessageReceiver = "";
+    this.state.newMessageReceiverInvalid = true;
+    this.state.newMessageTextInvalid = true;
   }
 
   createSendMessagesContent() {
@@ -161,15 +184,17 @@ export default class MessageContainer extends Component {
             <div label="Posteingang">{this.createReceivedMessagesContent()}</div>
             <div label="Postausgang">{this.createSendMessagesContent()}</div>
             <div label="Neu">
-              <Textarea
-                placeholder="Ihre Nachricht..."
-                onChange={this.handleMessageText}
-              ></Textarea>
-              <input
-                placeholder="Adresse des Empfängers"
-                onChange={this.handleReceiverAdress}
-              />
-              <Button onClick={this.submitMessage}>Abschicken</Button>
+              <Form.Group controlId="newForm.AddressInput">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control type="address" placeholder="0x0000000000000000000000000000000000000000" value={this.state.newMessageReceiver} onChange={this.handleReceiverAdress}/>
+              </Form.Group>
+              <Form.Group controlId="newForm.MessageInput">
+                <Form.Label>Example textarea</Form.Label>
+                <Form.Control style={{ position: "absolute", height: "calc(100% - 270px)", width: "calc(100% - 40px)", resize: "none"}} as="textarea" placeholder="Hier können Sie Ihre Nachricht eingeben..." value={this.state.newMessageText} onChange={this.handleMessageText}/>
+              </Form.Group>
+              <Button style={{ position: "absolute", width: "calc(100% - 40px)", bottom: "10px"}} variant="outline-light" disabled={this.state.newMessageReceiverInvalid || this.state.newMessageTextInvalid} onClick={this.submitMessage}>
+                Senden
+              </Button>
             </div>
           </Tabs>
         </Content>
