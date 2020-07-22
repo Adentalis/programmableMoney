@@ -15,25 +15,37 @@ export default class MessageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: "",
-      receiverAddress: "",
+      newMessageText: "",
+      newMessageReceiver: "",
+      sendMessageKey: null,
+      getSendMessagesKey: null,
+      getReceivedMessagesKey: null,
     };
+
     this.handleMessageText = this.handleMessageText.bind(this);
     this.handleReceiverAdress = this.handleReceiverAdress.bind(this);
     this.submitMessage = this.submitMessage.bind(this);
   }
 
   handleMessageText(e) {
-    this.setState({ message: e.target.value });
+    this.setState({ newMessageText: e.target.value });
   }
 
   handleReceiverAdress(e) {
-    this.setState({ receiverAddress: e.target.value });
+    this.setState({ newMessageReceiver: e.target.value });
   }
 
-  submitMessage() {
-    console.log("Nachricht: " + this.state.message);
-    console.log("Adresse des Empfängers: " + this.state.receiverAddress);
+  async submitMessage() {
+    console.log("Nachricht: " + this.state.newMessageText);
+    console.log("Adresse des Empfängers: " + this.state.newMessageReceiver);
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.Bank;
+
+    contract.methods["sendMessage"].cacheSend(
+      this.state.newMessageText,
+      this.state.newMessageReceiver,
+      { from: drizzleState.accounts[0] }
+    );
   }
 
   render() {
@@ -43,8 +55,8 @@ export default class MessageContainer extends Component {
         <Divider />
         <Content>
           <Tabs>
-            <div label="Posteingang"></div>
-            <div label="Postausgang"></div>
+            <div label="Posteingang">test</div>
+            <div label="Postausgang">testr2323</div>
             <div label="Neu">
               <Textarea
                 placeholder="Ihre Nachricht..."
