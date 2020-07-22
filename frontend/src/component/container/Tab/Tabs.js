@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
+import styled from "styled-components";
 require('./styletab.css');
 
+export const Divider = styled.hr`
+    
+`;
 
 class Tabs extends Component {
   static propTypes = {
