@@ -85,9 +85,9 @@ class NavigationBar extends Component {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Link></Nav.Item>
               <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_SEND_PATH}>{NAVIGATION_SEND_TEXT}</Link></Nav.Item>
               <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_FREEZE_PATH}>{NAVIGATION_FREEZE_TEXT}</Link></Nav.Item>
+              <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Link></Nav.Item>
             </Nav>
             <Nav className="ml-auto">
               <NavDropdown.Divider />
@@ -99,12 +99,6 @@ class NavigationBar extends Component {
                 <FontAwesomeIcon icon={faUser} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
                 <Nav.Item style={{display: "inline-block"}}> {this.getBalance()} ETH</Nav.Item>
               </div>
-              {/*
-              <div>
-                <FontAwesomeIcon icon={faNetworkWired} style={{display: "inline-block", marginRight: "10px", marginLeft: "10px"}}/>
-                <Nav.Item style={{display: "inline-block"}}> {this.state.network} </Nav.Item>
-              </div>
-              */}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
