@@ -103,7 +103,6 @@ export default class InfoContainer extends Component {
     }
     this.setState({ transactionValue: "" });
     this.setState({ transactionValueInvalid: true });
-    this.getKeys();
   };
 
   deposit() {
