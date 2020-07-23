@@ -134,7 +134,7 @@ export default class FreezeMoneyContainer extends Component {
 
   sortFreezeTransactionsByReleaseDate(freezeTransactions) {
     return freezeTransactions.sort((freezeTransactionA, freezeTransactionB) => {
-      return freezeTransactionA.value[2] - freezeTransactionB.value[2];
+      return freezeTransactionB.value[0] - freezeTransactionA.value[0];
     });
   }
 
