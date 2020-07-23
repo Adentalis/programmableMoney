@@ -19,12 +19,13 @@ contract Bank {
 
     function deposit() public payable {
         require(msg.value > 0);
+        require(freezeEnd[msg.sender] <= now);
         balances[msg.sender] += msg.value;
     }
 
     function withdraw(uint256 _value) public {
-        require(balances[msg.sender] > _value);
-        require(freezeEnd[msg.sender] < now);
+        require(balances[msg.sender] >= _value);
+        require(freezeEnd[msg.sender] <= now);
         msg.sender.transfer(_value);
         balances[msg.sender] -= _value;
     }
