@@ -83,7 +83,7 @@ export default class FreezeMoneyContainer extends Component {
   }
 
   submitFreezeTransaction() {
-    var selectedTime = new Date(this.state.freezeTime).getTime()/1000;
+    var selectedTime = new Date(this.state.freezeTime).getTime() / 1000;
     this.createFreezeTranaction(
       this.state.freezeValue,
       selectedTime,
@@ -141,64 +141,70 @@ export default class FreezeMoneyContainer extends Component {
   createFreezeTransactionContent() {
     const { Bank } = this.props.drizzleState.contracts;
 
-    const lastFreezeTransaction = [];
+    //load all 5 tx from the SC
+    const allFreezeTransactions = [];
     for (let i = 0; i < this.MAXIMUM_FREEZE_TRANSACTIONS; i++) {
-      lastFreezeTransaction[i] =
+      allFreezeTransactions[i] =
         Bank.getFreezeTransaction[this.state.getFreezeTransactionKey[i]];
     }
-    //wait for all Transactions loaded
-    if (this.allFreezeTransactionsLoaded(lastFreezeTransaction)) {
-      return this.createAllFreezeTransactionContent(lastFreezeTransaction);
+
+    //check if all 5 rx loaded succesfully
+    if (this.allFreezeTransactionsLoaded(allFreezeTransactions)) {
+
+      //filter the empty ones
+      let filledFreezeTransaction = allFreezeTransactions.filter(
+        (freezeTransaction) => freezeTransaction.value[1] !== "0"
+      );
+
+      //sort by date
+      filledFreezeTransaction = this.sortFreezeTransactionsByReleaseDate(
+        filledFreezeTransaction
+      );
+
+      return filledFreezeTransaction.map((freezeTransaction, index) => (
+        <div key={index}>
+          <hr
+            style={
+              index != 0
+                ? { borderTop: "3px solid #bbb" }
+                : { borderTop: "0px solid #bbb" }
+            }
+          />
+          <div>
+            <div>
+              <b>Zweck</b>
+            </div>
+            <div
+              style={{
+                paddingLeft: "10px",
+                width: "100%",
+                overflow: "visible",
+              }}
+            >
+              {freezeTransaction.value[2]}
+            </div>
+          </div>
+          <div>
+            <div>
+              <b>Betrag</b>
+            </div>
+            <div style={{ paddingLeft: "10px", width: "100%" }}>
+              {freezeTransaction.value[1]}
+            </div>
+          </div>
+          <div>
+            <div>
+              <b>Freischaltdatum</b>
+            </div>
+            <div style={{ paddingLeft: "10px", width: "100%" }}>
+              {new Date(
+                1000 * parseInt(freezeTransaction.value[0]) + 3600000
+              ).toLocaleString()}
+            </div>
+          </div>
+        </div>
+      ));
     }
-  }
-
-  createAllFreezeTransactionContent(allFreezeTransactions) {
-    let filledFreezeTransaction = allFreezeTransactions.filter(
-      (freezeTransaction) => freezeTransaction.value[1] !== "0"
-    );
-    filledFreezeTransaction = this.sortFreezeTransactionsByReleaseDate(
-      filledFreezeTransaction
-    );
-
-    return filledFreezeTransaction.map((freezeTransaction, index) => (
-      <div key={index}>
-        <hr
-          style={
-            index != 0
-              ? { borderTop: "3px solid #bbb" }
-              : { borderTop: "0px solid #bbb" }
-          }
-        />
-        <div>
-          <div>
-            <b>Zweck</b>
-          </div>
-          <div
-            style={{ paddingLeft: "10px", width: "100%", overflow: "visible" }}
-          >
-            {freezeTransaction.value[2]}
-          </div>
-        </div>
-        <div>
-          <div>
-            <b>Betrag</b>
-          </div>
-          <div style={{ paddingLeft: "10px", width: "100%" }}>
-            {freezeTransaction.value[1]}
-          </div>
-        </div>
-        <div>
-          <div>
-            <b>Freischaltdatum</b>
-          </div>
-          <div style={{ paddingLeft: "10px", width: "100%" }}>
-            {new Date(
-              1000 * parseInt(freezeTransaction.value[0]) + 3600000
-            ).toLocaleString()}
-          </div>
-        </div>
-      </div>
-    ));
   }
 
   allFreezeTransactionsLoaded(lastFreezeTransaction) {
