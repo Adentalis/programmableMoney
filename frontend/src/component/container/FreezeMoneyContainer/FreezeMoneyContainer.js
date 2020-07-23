@@ -20,6 +20,7 @@ export default class FreezeMoneyContainer extends Component {
   }
 
   componentDidMount() {
+    /*
     const { drizzle } = this.props;
     const contract = drizzle.contracts.Bank;
 
@@ -29,6 +30,7 @@ export default class FreezeMoneyContainer extends Component {
       getFreezeTransactionKey[i] = contract.methods["getFreezeTransaction"].cacheCall(i);
     }
     this.setState({ getFreezeTransactionKey });
+    */
   }
 
   handleFreezeTimeChange(e) {
@@ -214,7 +216,7 @@ export default class FreezeMoneyContainer extends Component {
             <div label="Zurückgelegte Beträge">
               <div style={{width: "calc(100% - 40px)", height: "calc(100% - 100px)", overflow: "auto", position: "absolute" }}>
                 Content to scroll
-                {this.createFreezeTransactionContent()}
+                {/*this.createFreezeTransactionContent()*/}
               </div>
             </div>
           </Tabs>

@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import { Container, Header, Divider, Content } from "../Container";
 import styled from "styled-components";
 
-import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
+import {ToggleButtonGroup, ToggleButton, Form} from "react-bootstrap";
 
 const StyledContainer = styled(Container)`
   color: #e6e6fa;
   position: relative;
   width: calc(100% - 100px);
   height: calc(55% - 100px);
-  margin: 50px 50px 50px 50px;
   min-height: 280px;
 
 `;
@@ -104,6 +103,25 @@ export default class LastTxContainer extends Component {
 
     return (
       <Content>
+        <div>
+          <div>
+            <div style={{width: "20%"}}><b>Datum</b></div>
+            <div style={{paddingLeft: "10px"}}>{localDateTime}</div>
+          </div>
+          <div>
+            <div style={{width: "20%"}}><b>Adresse</b></div>
+            <Form.Control
+                value={address}
+                disabled
+                style={{backgroundColor: "#5a1791", color: "white", border: "none", padding: "10px"}}
+            />
+          </div>
+          <div>
+            <div style={{width: "20%"}}><b>Betrag</b></div>
+            <div style={{paddingLeft: "10px"}}>{value}</div>
+          </div>
+        </div>
+        {/*
         <table style={tableStyle}>
           <tr>
             <th style={thStyle}>Datum</th>
@@ -115,9 +133,12 @@ export default class LastTxContainer extends Component {
           </tr>
           <tr>
             <th style={thStyle}>Betrag</th>
-            <td>{this.formatEth(value)}</td>
+            <td>
+
+            </td>
           </tr>
         </table>
+        */}
       </Content>
     );
   }

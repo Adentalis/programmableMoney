@@ -24,7 +24,7 @@ export const Container = styled.div`
     }
 `;
 
-export const Header = styled.h1`
+export const Header = styled.h2`
     color: #E6E6FA;
 `;
 

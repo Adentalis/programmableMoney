@@ -14,7 +14,6 @@ const StyledContainer = styled(Container)`
   position: relative;
   width: calc(100% - 100px);
   height: calc(55% - 100px);
-  margin: 70px 50px 50px 50px;
   min-height: 280px;
 
 }
