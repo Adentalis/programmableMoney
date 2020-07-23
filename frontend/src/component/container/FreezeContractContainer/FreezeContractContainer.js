@@ -55,7 +55,7 @@ export default class FreezeContractContainer extends Component {
     console.log(timeInSecondsToFreeze + " Sekunden zum einfrieren");
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Bank;
-    contract.methods["freezeMoney"].cacheSend(timeInSecondsToFreeze, {
+    contract.methods["freezeContract"].cacheSend(timeInSecondsToFreeze, {
       from: drizzleState.accounts[0],
     });
   }
@@ -89,20 +89,17 @@ export default class FreezeContractContainer extends Component {
         <Divider />
         <Content>
           <div>
-            <div class="md-form md-outline input-with-post-icon datepicker">
-              <label>Bis wann soll Ihr Konto gesperrt werden?</label>
-              <input
-                id="freezeTimePicker"
-                placeholder="Select date"
-                type="date"
-                class="form-control"
-                min={this.getNowFormatet()}
-                value={this.state.freezeTime}
-                onChange={this.handleFreezeTimeChange}
-              />
-            </div>
-            <div class="form-group" />
-          </div>{
+            <label>Bis wann soll Ihr Konto gesperrt werden?</label>
+            <input
+              style={{width: "100%", marginBottom: "10px"}}
+              placeholder="Datum auswählen"
+              type="date"
+              className="form-control"
+              min={this.getNowFormatet()}
+              value={this.state.freezeTime}
+              onChange={this.handleFreezeTimeChange}
+            />
+          </div>
           <Button
               style={{
                 position: "absolute",
@@ -114,19 +111,7 @@ export default class FreezeContractContainer extends Component {
               onClick={this.submitFreezeTime}
           >
             Senden
-          </Button>/*
-          <Button
-            style={{
-y
-            }}
-            variant="outline-light"
-            disabled={!this.state.validFreezeTime}
-            onClick={this.submitFreezeTime}
-          >
-
-            Konto sperren
           </Button>
-          */}
         </Content>
       </Container>
     );

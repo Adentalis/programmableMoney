@@ -8,13 +8,13 @@ export default class FreezeMoneyContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      freezeValue: null,
+      freezeValue: '',
       freezeValueInvalid: true,
 
-      freezeTime: null,
+      freezeTime: '',
       freezeTimeInvalid: true,
 
-      freezeMessage: null,
+      freezeMessage: '',
       freezeMessageInvalid: true,
 
       transactionValue: "",
@@ -141,7 +141,7 @@ export default class FreezeMoneyContainer extends Component {
 
   createAllFreezeTransactionContent(allFreezeTransactions) {
     let filledFreezeTransaction = allFreezeTransactions.filter(
-        (freezeTransaction) => freezeTransaction.value[1] !== ""
+        (freezeTransaction) => freezeTransaction.value[1] !== "0"
     );
     filledFreezeTransaction = this.sortFreezeTransactionsByReleaseDate(filledFreezeTransaction);
 

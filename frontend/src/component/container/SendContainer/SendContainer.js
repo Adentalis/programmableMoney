@@ -2,17 +2,10 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Tabs from "../Tab/Tabs";
 import Dropdown from "./dropdownsendmoney";
-import {
-  Container,
-  InnerContainer,
-  Header,
-  Divider,
-  Content,
-  Button,
-} from "../Container";
+import {Container, InnerContainer, Header, Divider,Content,} from "../Container";
 import { NAVIGATION_SEND_TEXT } from "../../../constants";
-
-import { FormControl } from "react-bootstrap";
+import { Form, Button, FormControl } from "react-bootstrap";
+import Select from "react-select";
 
 const StyledContainer = styled(Container)`
   /* Special Style for inner Container */
@@ -30,34 +23,60 @@ export default class SendContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      txTargetAdress: "",
-      txValue: "",
+        txTargetAddress: "",
+        txTargetAddressInvalid: true,
+        txValue: "",
+        txValueInvalid: true
     };
-  }
-
-  componentDidMount() {
-    this.handleTransaction = this.handleTransaction.bind(this);
+      this.handleTransaction = this.handleTransaction.bind(this);
+      this.handleTxTargetChange = this.handleTxTargetChange.bind(this);
+      this.handleTxValueChange = this.handleTxValueChange.bind(this);
   }
 
   handleTxTargetChange = (e) => {
-    this.setState({ txTargetAdress: e.target.value });
+      this.setState({ txTargetAddress: e.target.value });
+      var validation = {
+          isAddress: function (str) {
+              var pattern = /^0x[a-f,0-9,A-F]+$/;
+              return pattern.test(str); // returns a boolean
+          },
+      };
+      if (validation.isAddress(e.target.value) && e.target.value.length == 42) {
+          this.setState({ txTargetAddressInvalid: false });
+      } else {
+          this.setState({ txTargetAddressInvalid: true });
+      }
   };
 
   handleTxValueChange = (e) => {
     this.setState({ txValue: e.target.value });
+      var newValue = e.target.value;
+      var validation = {
+          isNumber: function (str) {
+              var pattern = /^\d+$/;
+              return pattern.test(str); // returns a boolean
+          },
+      };
+      if (validation.isNumber(newValue)) {
+          this.setState({ txValueInvalid: false });
+      } else {
+          this.setState({ txValueInvalid: true });
+      }
+
   };
 
   handleTransaction = async () => {
     await this.sendMoney();
+    this.setState({txValue: '', txValueInvalid: true, txTargetAddress: '', txTargetAddressInvalid: true})
   };
 
   sendMoney() {
     const { txValue } = this.state;
-    const { txTargetAdress } = this.state;
+    const { txTargetAddress } = this.state;
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Bank;
-    console.log("sendMoney " + txValue + " - " + txTargetAdress);
-    contract.methods["sendMoney"].cacheSend(txTargetAdress, txValue, {
+    console.log("sendMoney " + txValue + " - " + txTargetAddress);
+    contract.methods["sendMoney"].cacheSend(txTargetAddress, txValue, {
       from: drizzleState.accounts[0],
     });
   }
@@ -70,35 +89,38 @@ export default class SendContainer extends Component {
         <Content>
           <Tabs>
             <div label="Überweisung senden">
-              <StyledInnerContainer>
-                <div class="form-group" />
-                <label for="exampleInputEmail1">Adresse </label>
-                <FormControl
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  placeholder="Adresse eingeben"
-                  value={this.state.txTargetAdress}
-                  onChange={this.handleTxTargetChange}
+                <Form.Label>Ethereum Addresse:</Form.Label>
+                <Form.Control
+                    style={{ width: "100%", marginBottom: "10px" }}
+                    type="address"
+                    placeholder="0x0000000000000000000000000000000000000000"
+                    value={this.state.txTargetAddress}
+                    onChange={this.handleTxTargetChange}
                 />
-                <div class="form-group" />
-                <label for="exampleInputEmail1">Betrag </label>
+                <label>Betrag</label>
                 <FormControl
-                  type="number"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  placeholder="Betrag eingeben"
-                  value={this.state.txValue}
-                  onChange={this.handleTxValueChange}
+                    style={{ width: "100%", marginBottom: "10px" }}
+                    type="text"
+                    placeholder="Betrag"
+                    className="mr-sm-2"
+                    value={this.state.txValue}
+                    onChange={this.handleTxValueChange}
                 />
-              </StyledInnerContainer>
-              <StyledButton type="button" onClick={this.handleTransaction}>
-                bestätigen
-              </StyledButton>
+              <Button
+                  style={{
+                    position: "absolute",
+                    width: "calc(100% - 40px)",
+                    bottom: "10px",
+                  }}
+                  variant="outline-light"
+                  disabled={this.state.txTargetAddressInvalid || this.state.txValueInvalid}
+                  onClick={this.handleTransaction}
+              >
+                Bestätigen
+              </Button>
+
             </div>
-            <div label="Termin">
-              <StyledInnerContainer>
+            <div label="Termin (bald verfügbar)">
                 <div className="test">
                   <label for="example">Datum auswählen</label>
                   <input
@@ -109,8 +131,7 @@ export default class SendContainer extends Component {
                     class="form-control"
                   />
                 </div>
-                <p></p>
-                <p></p>
+                {/*
                 <div
                   class="md-form md-outline input-with-post-icon timepicker"
                   darktheme="true"
@@ -124,6 +145,7 @@ export default class SendContainer extends Component {
                   />
                   <i class="fas fa-envelope  input-prefix"></i>
                 </div>
+                */}
                 <div class="form-group" />
                 <label for="exampleInputEmail1">Betrag </label>
                 <input
@@ -133,11 +155,19 @@ export default class SendContainer extends Component {
                   aria-describedby="emailHelp"
                   placeholder="Betrag eingeben"
                 />
-              </StyledInnerContainer>
-              <StyledButton type="button">bestätigen</StyledButton>
+                <Button
+                    style={{
+                        position: "absolute",
+                        width: "calc(100% - 40px)",
+                        bottom: "10px",
+                    }}
+                    variant="outline-light"
+                    disabled={true}
+                >
+                    Bestätigen
+                </Button>
             </div>
-            <div label="Dauerauftrag (bald verfügbar..)" disabled={true}>
-              <StyledInnerContainer>
+            <div label="Dauerauftrag (bald verfügbar)" disabled={true}>
                 <div class="md-form md-outline input-with-post-icon datepicker">
                   <label for="example">Datum auswählen</label>
                   <input
@@ -152,14 +182,21 @@ export default class SendContainer extends Component {
                 <input
                   type="betrag"
                   class="form-control"
-                  id="exampleInputEmail1"
                   aria-describedby="emailHelp"
                   placeholder="Betrag eingeben"
                 />
-                <Dropdown />
-              </StyledInnerContainer>
-              <StyledButton>bestätigen</StyledButton>
-            </div>
+                <Dropdown style={{marginTop: "10px"}} />
+                <Button
+                    style={{
+                        position: "absolute",
+                        width: "calc(100% - 40px)",
+                        bottom: "10px",
+                    }}
+                    variant="outline-light"
+                    disabled={true}
+                >
+                    Bestätigen
+                </Button>            </div>
           </Tabs>
         </Content>
       </StyledContainer>

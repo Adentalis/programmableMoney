@@ -1,8 +1,6 @@
     import React from 'react';
     import Select from 'react-select';
-    import 'bootstrap/dist/css/bootstrap.min.css';
-    import './dropdownsendmoney.css';
-    
+
     const intervals = [
       { label: "alle 15 Tage", value: 1 },
       { label: "zum 1. im Monat", value: 2},
@@ -11,13 +9,8 @@
     ];
     
     const Dropdown = () => (
-     
-        <div className="row">
-          <div className="col-md-4"></div>
-          <div className="col-md-4">
-            <Select options={ intervals } />
-          </div>
-          <div className="col-md-4"></div>
+        <div style={{marginTop: "10px"}} >
+        <Select style={{color: "black"}}options={ intervals } />
         </div>
     );
     
