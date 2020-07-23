@@ -141,7 +141,7 @@ export default class InfoContainer extends Component {
     // get and save the key for the variable we are interested in
     const ownBalanceDataKey = contract.methods["getOwnBalance"].cacheCall();
     this.setState({ ownBalanceDataKey });
-    const ownFreeTimeDataKey = contract.methods["getOwnFreezeEnd"].cacheCall();
+    const ownFreeTimeDataKey = contract.methods["getOwnFreezeContractEnd"].cacheCall();
     this.setState({ ownFreeTimeDataKey });
     const blockchainTime = contract.methods["getCurrentTime"].cacheCall();
     this.setState({ blockchainTime });
@@ -164,7 +164,7 @@ export default class InfoContainer extends Component {
     const ownBalance = ownBalanceResponse && ownBalanceResponse.value;
 
     const ownFreezeTimeResponse =
-      Bank.getOwnFreezeEnd[this.state.ownFreeTimeDataKey];
+      Bank.getOwnFreezeContractEnd[this.state.ownFreeTimeDataKey];
     const ownFreezeTime = ownFreezeTimeResponse && ownFreezeTimeResponse.value;
 
     const blockchainTimeResponse =
