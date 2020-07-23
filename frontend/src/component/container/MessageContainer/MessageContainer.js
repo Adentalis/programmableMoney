@@ -177,7 +177,7 @@ export default class MessageContainer extends Component {
             <div label="Postausgang">{this.createSendMessagesContent()}</div>
             <div label="Neu">
               <Form.Group controlId="newForm.AddressInput">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>Ethereum Adresse:</Form.Label>
                 <Form.Control
                   type="address"
                   placeholder="0x0000000000000000000000000000000000000000"
@@ -186,7 +186,7 @@ export default class MessageContainer extends Component {
                 />
               </Form.Group>
               <Form.Group controlId="newForm.MessageInput">
-                <Form.Label>Example textarea</Form.Label>
+                <Form.Label>Nachricht:</Form.Label>
                 <Form.Control
                   style={{
                     position: "absolute",
