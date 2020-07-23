@@ -2,18 +2,15 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Tabs from "../Tab/Tabs";
 import Dropdown from "./dropdownsendmoney";
-import {Container, InnerContainer, Header, Divider,Content,} from "../Container";
+import {Container, Header, Divider,Content,} from "../Container";
 import { NAVIGATION_SEND_TEXT } from "../../../constants";
 import { Form, Button, FormControl } from "react-bootstrap";
-import Select from "react-select";
 
 const StyledContainer = styled(Container)`
-  /* Special Style for inner Container */
+  /* Special Style for Container */
+
 `;
 
-const StyledInnerContainer = styled(InnerContainer)`
-  /* Special Style for inner Container */
-`;
 
 export const StyledButton = styled(Button)`
   /* Special Style for inner Container */

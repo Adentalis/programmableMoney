@@ -41,34 +41,3 @@ export const Content = styled.div`
     background-color: #5A1791 ;
     font-size: large;
 `;
-
-export const InnerContainer= styled.div`
-    background-color: #9575cd ;
-    border-radius: 2.5px;
-    width: 100%;
-    height: 80%;
-    padding:5%;
-    margin: auto;
-    opacity: 0.2; 
-   
-`;
-
-export const styleFontText= styled.div`
-    background-color: white ;
-`;
-
-export const Button = styled.button`
-    display: flex;
-    justify-content: center;
-    border-radius: 20px;  
-    width: 40%;
-    height: 20%;
-    padding: 2%;
-    margin:auto;
-    opacity: 0.2; 
-    background-color: white;
-`;
-
-export const Textarea = styled.textarea`
-    width: 100%;
-`;

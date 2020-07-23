@@ -18,6 +18,7 @@
   width: 100% ;
   height: calc(100% - 71px);
   background-color: #483d8b;
+  min-height: 650px;
 }
 
 .left {

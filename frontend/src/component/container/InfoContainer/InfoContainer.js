@@ -15,7 +15,6 @@ const StyledContainer = styled(Container)`
   width: calc(100% - 100px);
   height: calc(55% - 100px);
   min-height: 280px;
-
 }
 `;
 
