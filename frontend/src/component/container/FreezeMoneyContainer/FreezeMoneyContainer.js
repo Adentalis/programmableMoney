@@ -133,7 +133,7 @@ export default class FreezeMoneyContainer extends Component {
 
   sortFreezeTransactionsByReleaseDate(freezeTransactions) {
     return freezeTransactions.sort((freezeTransactionA, freezeTransactionB) => {
-      return freezeTransactionB.value[0] - freezeTransactionA.value[0];
+      return freezeTransactionA.value[0] - freezeTransactionB.value[0];
     });
   }
 
@@ -235,11 +235,9 @@ export default class FreezeMoneyContainer extends Component {
   async finishFreezeTranaction(freezeTranaction) {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Bank;
-
-    contract.methods["finishFreezeTransaction"].cacheSend(
-      freezeTranaction.index,
-      { from: drizzleState.accounts[0] }
-    );
+    contract.methods[
+      "finishFreezeTransaction"
+    ].cacheSend(freezeTranaction.index, { from: drizzleState.accounts[0] });
   }
 
   allFreezeTransactionsLoaded(lastFreezeTransaction) {
