@@ -1,6 +1,90 @@
 pragma solidity >=0.4.21 <0.7.0;
-
 contract Bank {
+    
+    /*--------------------------------
+            FREEZE MONEY
+    --------------------------------*/
+    
+    mapping(address => FreezeTransaction[5]) freezedTransactions;
+    mapping(address => uint[5]) freezedTransactionOccupied;
+
+    
+    struct FreezeTransaction {
+        uint256 date;
+        uint256 value;
+        string message;
+    }
+    
+    function createFreezeTranaction(uint256 _date, uint256 _value, string memory _message) public {
+        require(balances[msg.sender] >= _value);
+        //require(_date > now);
+        require(freezeContractEnd[msg.sender] <= now);
+        
+        balances[msg.sender] -= _value;
+        uint nextEmptyIndex = getNextEmptyFreezeTransactionIndex();
+        freezedTransactions[msg.sender][nextEmptyIndex] = FreezeTransaction(
+            _date,
+            _value,
+            _message
+        );
+        freezedTransactionOccupied[msg.sender][nextEmptyIndex] = 1;
+    }
+    
+    function finishFreezeTransaction(uint _index) public {
+        require(freezeContractEnd[msg.sender] <= now);
+        balances[msg.sender] += freezedTransactions[msg.sender][_index].value;
+        freezedTransactions[msg.sender][_index].value = 0;
+        freezedTransactions[msg.sender][_index].date = 0;
+        freezedTransactions[msg.sender][_index].message ="";
+        freezedTransactionOccupied[msg.sender][_index] = 0;
+    }
+    
+    
+    function getNextEmptyFreezeTransactionIndex() public view returns (uint) {
+        for(uint i = 0 ; i < 5; i++){
+            if(freezedTransactionOccupied[msg.sender][i] == 0){
+                return i;
+            }
+        }
+    }
+    
+    
+    function getFreezedTransactionOccupied(uint _index) public view returns (uint) {
+        return freezedTransactionOccupied[msg.sender][_index];
+    }
+    
+    
+    function allFreezedTransactionsOccupied() public view returns(bool){
+        for(uint i = 0 ; i < 5; i++){
+            if(getFreezedTransactionOccupied(i)== 0){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+    
+    function getFreezeTransaction(uint256 _position)
+        public
+        view
+        returns (
+            uint256,
+            uint256,
+            string memory
+        )
+    {
+        require(_position >= 0 && _position <= 5);
+        return (
+            freezedTransactions[msg.sender][_position].date,
+            freezedTransactions[msg.sender][_position].value,
+            freezedTransactions[msg.sender][_position].message
+    );
+        
+    }
+       
+    
+    
     /*--------------------------------
             MONEY SECTION
     --------------------------------*/
@@ -19,13 +103,13 @@ contract Bank {
 
     function deposit() public payable {
         require(msg.value > 0);
-        require(freezeEnd[msg.sender] <= now);
+        require(freezeContractEnd[msg.sender] <= now);
         balances[msg.sender] += msg.value;
     }
 
     function withdraw(uint256 _value) public {
         require(balances[msg.sender] >= _value);
-        require(freezeEnd[msg.sender] <= now);
+        require(freezeContractEnd[msg.sender] <= now);
         msg.sender.transfer(_value);
         balances[msg.sender] -= _value;
     }
@@ -50,7 +134,7 @@ contract Bank {
     }
 
     function getOwnBalance() public view returns (uint256) {
-        return balances[msg.sender];
+return balances[msg.sender];
     }
 
     function getLastReceivedTransaction()
@@ -76,7 +160,7 @@ contract Bank {
             address,
             uint256,
             uint256
-        )
+)
     {
         return (
             lastSendTransaction[msg.sender].receiver,
@@ -154,20 +238,25 @@ contract Bank {
             messagesReceived[msg.sender][_position].time
         );
     }
+    
+        /*--------------------------------
+            FREEZE CONTRACT
+    --------------------------------*/
+    
+    mapping(address => uint256) freezeContractEnd;
 
+    function getOwnFreezeContractEnd() public view returns (uint256) {
+        return freezeContractEnd[msg.sender];
+    }
+
+    function freezeContract(uint256 _timeToFreeze) public {
+        require(balances[msg.sender] > 0);
+        freezeContractEnd[msg.sender] = now + _timeToFreeze;
+    }
+    
     /*
     HELPER FUNCTIONS
     */
-    mapping(address => uint256) freezeEnd;
-
-    function getOwnFreezeEnd() public view returns (uint256) {
-        return freezeEnd[msg.sender];
-    }
-
-    function freezeMoney(uint256 _timeToFreeze) public {
-        require(balances[msg.sender] > 0);
-        freezeEnd[msg.sender] = now + _timeToFreeze;
-    }
 
     function getCurrentTime() public view returns (uint256) {
         return now;
