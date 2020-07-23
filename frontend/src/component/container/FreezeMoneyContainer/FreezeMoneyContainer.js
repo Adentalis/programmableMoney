@@ -241,7 +241,7 @@ export default class FreezeMoneyContainer extends Component {
                 placeholder="Select date"
                 type="date"
                 class="form-control"
-                min={this.getNowFormatet()}
+                //min={this.getNowFormatet()}
                 value={this.state.freezeTime}
                 onChange={this.handleFreezeTimeChange}
               />
