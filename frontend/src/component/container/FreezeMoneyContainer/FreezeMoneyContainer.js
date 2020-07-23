@@ -24,7 +24,6 @@ export default class FreezeMoneyContainer extends Component {
     this.handleFreezeValueChange = this.handleFreezeValueChange.bind(this);
     this.handleFreezeTimeChange = this.handleFreezeTimeChange.bind(this);
     this.handleFreezeMessageChange = this.handleFreezeMessageChange.bind(this);
-
     this.submitFreezeTransaction = this.submitFreezeTransaction.bind(this);
 
     this.getNowFormatet = this.getNowFormatet.bind(this);
@@ -206,12 +205,41 @@ export default class FreezeMoneyContainer extends Component {
     }
   }
 
-  isFreezeTransactionTimeOver(freezeTransaction){
-    return(<div style={{ paddingLeft: "10px", width: "100%" }}>
-    {new Date(
-      1000 * parseInt(freezeTransaction.value[0]) - 3600000
-    ).toLocaleString()}
-  </div>)
+  isFreezeTransactionTimeOver(freezeTransaction) {
+    let txEnd = parseInt(freezeTransaction.value[0]) - 3600;
+    let now = new Date().getTime() / 1000;
+    if (now - txEnd < 0) {
+      return (
+        <div style={{ paddingLeft: "10px", width: "100%" }}>
+          {new Date(
+            1000 * parseInt(freezeTransaction.value[0]) - 3600000
+          ).toLocaleString()}
+        </div>
+      );
+    } else {
+      return (
+        <Button
+          style={{
+            width: "calc(100% - 40px)",
+            bottom: "10px",
+          }}
+          variant="outline-light"
+          onClick={() => this.finishFreezeTranaction(freezeTransaction)}
+        >
+          Geld abholen
+        </Button>
+      );
+    }
+  }
+
+  async finishFreezeTranaction(freezeTranaction) {
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.Bank;
+
+    contract.methods["finishFreezeTransaction"].cacheSend(
+      freezeTranaction.index,
+      { from: drizzleState.accounts[0] }
+    );
   }
 
   allFreezeTransactionsLoaded(lastFreezeTransaction) {
