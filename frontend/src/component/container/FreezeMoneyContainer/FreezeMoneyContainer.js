@@ -199,15 +199,19 @@ export default class FreezeMoneyContainer extends Component {
             <div>
               <b>Freischaltdatum</b>
             </div>
-            <div style={{ paddingLeft: "10px", width: "100%" }}>
-              {new Date(
-                1000 * parseInt(freezeTransaction.value[0]) - 3600000
-              ).toLocaleString()}
-            </div>
+            {this.isFreezeTransactionTimeOver(freezeTransaction)}
           </div>
         </div>
       ));
     }
+  }
+
+  isFreezeTransactionTimeOver(freezeTransaction){
+    return(<div style={{ paddingLeft: "10px", width: "100%" }}>
+    {new Date(
+      1000 * parseInt(freezeTransaction.value[0]) - 3600000
+    ).toLocaleString()}
+  </div>)
   }
 
   allFreezeTransactionsLoaded(lastFreezeTransaction) {
