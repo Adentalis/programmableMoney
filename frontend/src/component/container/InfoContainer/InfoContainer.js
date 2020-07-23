@@ -38,7 +38,6 @@ export default class InfoContainer extends Component {
     ownBalanceDataKey: null,
     ownFreeTimeDataKey: null,
     blockchainTime: null,
-
   };
 
   componentDidMount() {
@@ -92,9 +91,9 @@ export default class InfoContainer extends Component {
       console.log("Invalid input for transcation");
       return;
     }
-    if (this.state.transactionMode === 1) {
+    if (this.state.transactionMode === "1") {
       await this.deposit();
-    } else if (this.state.transactionMode === 2) {
+    } else {
       await this.withdraw();
     }
     this.setState({ transactionValue: "" });
@@ -102,22 +101,27 @@ export default class InfoContainer extends Component {
   };
 
   deposit() {
+
     const { transactionValue } = this.state;
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Bank;
     console.log("Deposit " + transactionValue);
+
     contract.methods["deposit"].cacheSend({
       value: transactionValue,
       from: drizzleState.accounts[0],
     });
   }
 
-  withdraw = async () => {
-    console.log("Withdraw " + this.state.transactionValue);
+  withdraw(){
+    const { transactionValue } = this.state;
+    console.log("Withdraw " + transactionValue);
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Bank;
 
-    contract.methods["withdraw"].cacheSend({ from: drizzleState.accounts[0] });
+    contract.methods["withdraw"].cacheSend(transactionValue, {
+      from: drizzleState.accounts[0],
+    });
   };
 
   getKeys() {
@@ -149,15 +153,18 @@ export default class InfoContainer extends Component {
     const ownBalanceResponse = Bank.getOwnBalance[this.state.ownBalanceDataKey];
     const ownBalance = ownBalanceResponse && ownBalanceResponse.value;
 
-    const ownFreezeTimeResponse = Bank.getOwnFreezeEnd[this.state.ownFreeTimeDataKey];
+    const ownFreezeTimeResponse =
+      Bank.getOwnFreezeEnd[this.state.ownFreeTimeDataKey];
     const ownFreezeTime = ownFreezeTimeResponse && ownFreezeTimeResponse.value;
 
-    const blockchainTimeResponse = Bank.getCurrentTime[this.state.blockchainTime];
-    const blockchainTime = blockchainTimeResponse && blockchainTimeResponse.value;
+    const blockchainTimeResponse =
+      Bank.getCurrentTime[this.state.blockchainTime];
+    const blockchainTime =
+      blockchainTimeResponse && blockchainTimeResponse.value;
 
     const now = new Date();
-    const lastBlock = new Date(1000* parseInt(blockchainTime));
-    var secondsSinceLastBlock = Math.round(((now - lastBlock) / 1000) - 3600);
+    const lastBlock = new Date(1000 * parseInt(blockchainTime));
+    var secondsSinceLastBlock = Math.round((now - lastBlock) / 1000 - 3600);
 
     return (
       <StyledContainer>
@@ -167,12 +174,20 @@ export default class InfoContainer extends Component {
           <Form inline>
             <table style={tableStyle}>
               <tr>
-                <th style={thStyle}>Letzter Block vor: </th>
-                <td>{secondsSinceLastBlock} Sekunden </td>
+                <th style={thStyle}>Letzter Block: </th>
+                <td>
+                  {new Date(
+                    1000 * parseInt(blockchainTime) + 3600000
+                  ).toLocaleString()}
+                </td>
               </tr>
               <tr>
                 <th style={thStyle}>Konto gesperrt bis:</th>
-                <td>{ownFreezeTime}</td>
+                <td>
+                  {new Date(
+                    1000 * parseInt(ownFreezeTime) + 3600000
+                  ).toLocaleString()}
+                </td>
               </tr>
               <tr>
                 <th style={thStyle}>Guthaben: </th>
