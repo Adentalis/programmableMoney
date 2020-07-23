@@ -171,7 +171,7 @@ export default class InfoContainer extends Component {
                 <td>{secondsSinceLastBlock} Sekunden </td>
               </tr>
               <tr>
-                <th style={thStyle}>Geld eingefroren bis:</th>
+                <th style={thStyle}>Konto gesperrt bis:</th>
                 <td>{ownFreezeTime}</td>
               </tr>
               <tr>
