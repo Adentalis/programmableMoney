@@ -201,7 +201,7 @@ export default class FreezeMoneyContainer extends Component {
             </div>
             <div style={{ paddingLeft: "10px", width: "100%" }}>
               {new Date(
-                1000 * parseInt(freezeTransaction.value[0]) + 3600000
+                1000 * parseInt(freezeTransaction.value[0]) - 3600000
               ).toLocaleString()}
             </div>
           </div>
