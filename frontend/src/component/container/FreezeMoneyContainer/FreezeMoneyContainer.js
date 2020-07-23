@@ -147,9 +147,12 @@ export default class FreezeMoneyContainer extends Component {
       allFreezeTransactions[i] =
         Bank.getFreezeTransaction[this.state.getFreezeTransactionKey[i]];
     }
-
     //check if all 5 rx loaded succesfully
     if (this.allFreezeTransactionsLoaded(allFreezeTransactions)) {
+      //set index of position loaded - needed for accepting
+      for (let i = 0; i < this.MAXIMUM_FREEZE_TRANSACTIONS; i++) {
+        allFreezeTransactions[i].index = i;
+      }
 
       //filter the empty ones
       let filledFreezeTransaction = allFreezeTransactions.filter(
