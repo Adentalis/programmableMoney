@@ -134,25 +134,28 @@ export default class MessageContainer extends Component {
 
     return filledMessages.map((message, index) => (
       <div key={index}>
-        <table>
-          <tr>
-            <th>Datum</th>
-            <td>
-              {new Date(
-                1000 * parseInt(message.value[2]) + 3600000
-              ).toLocaleString()}
-            </td>
-          </tr>
-          <tr>
-            <th>Adresse</th>
-            <td>{message.value[0]}</td>
-          </tr>
-          <tr>
-            <th>Nachricht</th>
-            <td>{message.value[1]}</td>
-          </tr>
-        </table>
-        ---------------
+        <hr style={(index != 0) ? {borderTop: "3px solid #bbb"} : {borderTop: "0px solid #bbb"}}/>
+        <div>
+          <div><b>Datum</b></div>
+          <div style={{paddingLeft: "10px"}}>{new Date(
+              1000 * parseInt(message.value[2]) + 3600000
+          ).toLocaleString()}</div>
+        </div>
+        <div>
+          <div><b>Adresse</b></div>
+          {/*<div style={{paddingLeft: "10px"}}>{message.value[0]}</div>*/}
+          <Form.Control
+              value={message.value[0]}
+              disabled
+              style={{backgroundColor: "#5a1791", color: "white", border: "none", padding: "10px"}}
+          />
+        </div>
+        <div>
+          <div><b>Nachricht</b></div>
+          <div style={{ paddingLeft: "10px", width: "100%", overflow: "visible"}}>
+            {message.value[1]}
+          </div>
+        </div>
       </div>
     ));
   }
@@ -172,9 +175,15 @@ export default class MessageContainer extends Component {
         <Content>
           <Tabs>
             <div label="Posteingang">
-              {this.createReceivedMessagesContent()}
+              <div style={{width: "calc(100% - 40px)", height: "calc(100% - 100px)", overflow: "auto", position: "absolute" }}>
+                {this.createReceivedMessagesContent()}
+              </div>
             </div>
-            <div label="Postausgang">{this.createSendMessagesContent()}</div>
+            <div label="Postausgang">
+              <div style={{width: "calc(100% - 40px)", height: "calc(100% - 100px)", overflow: "auto", position: "absolute" }}>
+                {this.createSendMessagesContent()}
+              </div>
+            </div>
             <div label="Neu">
               <Form.Group controlId="newForm.AddressInput">
                 <Form.Label>Ethereum Adresse:</Form.Label>

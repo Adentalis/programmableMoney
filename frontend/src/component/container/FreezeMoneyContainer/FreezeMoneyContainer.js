@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Container, Header, Divider, Content } from "../Container";
 import { NAVIGATION_FREEZE_MONEY_TEXT } from "../../../constants";
-import { Button, FormControl} from "react-bootstrap";
+import {Button, Form, FormControl} from "react-bootstrap";
 import Tabs from "../Tab/Tabs";
 
 export default class FreezeMoneyContainer extends Component {
@@ -10,10 +10,25 @@ export default class FreezeMoneyContainer extends Component {
     this.state = {
       freezeTime: "2020-07-25T00:00",
       validFreezeTime: false,
+      getFreezeTransactionKey: [],
     };
     this.submitFreezeTime = this.submitFreezeTime.bind(this);
     this.handleFreezeTimeChange = this.handleFreezeTimeChange.bind(this);
     this.getNowFormatet = this.getNowFormatet.bind(this);
+
+    this.MAXIMUM_FREEZE_TRANSACTIONS = 5;
+  }
+
+  componentDidMount() {
+    const { drizzle } = this.props;
+    const contract = drizzle.contracts.Bank;
+
+    //init the 5 FreezeTransactions
+    let getFreezeTransactionKey = [];
+    for (let i = 0; i < this.MAXIMUM_FREEZE_TRANSACTIONS; i++) {
+      getFreezeTransactionKey[i] = contract.methods["getFreezeTransaction"].cacheCall(i);
+    }
+    this.setState({ getFreezeTransactionKey });
   }
 
   handleFreezeTimeChange(e) {
@@ -55,7 +70,7 @@ export default class FreezeMoneyContainer extends Component {
     console.log(timeInSecondsToFreeze + " Sekunden zum einfrieren");
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Bank;
-    contract.methods["freezeMoney"].cacheSend(timeInSecondsToFreeze, {
+    contract.methods["createFreezeTranaction"].cacheSend(timeInSecondsToFreeze, {
       from: drizzleState.accounts[0],
     });
   }
@@ -79,6 +94,71 @@ export default class FreezeMoneyContainer extends Component {
     }
     tomorrow = yyyy + '-' + mm + '-' + dd;
     return tomorrow;
+  }
+
+  sortOrdersByReleaseDate(orders) {
+    return orders.sort((orderA, orderB) => {
+      return orderA.value[2] - orderB.value[2];
+    });
+  }
+
+  createFreezeTransactionContent() {
+    const { Bank } = this.props.drizzleState.contracts;
+
+    const lastFreezeTransaction = [];
+    for (let i = 0; i < this.MAXIMUM_FREEZE_TRANSACTIONS; i++) {
+      lastFreezeTransaction[i] =
+          Bank.getFreezeTransaction[this.state.getFreezeTransactionKey[i]];
+    }
+    //wait for all Transactions loaded
+    if (this.allFreezeTransactionsLoaded(lastFreezeTransaction)) {
+      return this.createAllFreezeTransactionContent(lastFreezeTransaction);
+    }
+  }
+
+
+  createAllFreezeTransactionContent(allFreezeTransactions) {
+    let filledFreezeTransaction = allFreezeTransactions.filter(
+        (freezeTransaction) => freezeTransaction.value[1] !== ""
+    );
+    filledFreezeTransaction = this.sortOrdersByReleaseDate(filledFreezeTransaction);
+
+    return filledFreezeTransaction.map((freezeTransaction, index) => (
+        <div key={index}>
+          <hr style={(index != 0) ? {borderTop: "3px solid #bbb"} : {borderTop: "0px solid #bbb"}}/>
+          <div>
+            <div>
+              <b>Zweck</b>
+            </div>
+            <div style={{ paddingLeft: "10px", width: "100%", overflow: "visible"}}>
+              {freezeTransaction.value[2]}
+            </div>
+          </div>
+          <div>
+            <div>
+              <b>Betrag</b>
+            </div>
+            <div style={{ paddingLeft: "10px", width: "100%"}}>
+              {freezeTransaction.value[1]}
+            </div>
+          </div>
+          <div>
+            <div>
+              <b>Freischaltdatum</b>
+            </div>
+            <div style={{ paddingLeft: "10px", width: "100%"}}>
+              {freezeTransaction.value[0]}
+            </div>
+          </div>
+        </div>
+    ));
+  }
+
+  allFreezeTransactionsLoaded(orders) {
+    for (let i = 0; i < this.MAXIMUM_ORDERS; i++) {
+      if (orders[i] === undefined) return false;
+    }
+    return true;
   }
 
   render() {
@@ -134,6 +214,7 @@ export default class FreezeMoneyContainer extends Component {
             <div label="Zurückgelegte Beträge">
               <div style={{width: "calc(100% - 40px)", height: "calc(100% - 100px)", overflow: "auto", position: "absolute" }}>
                 Content to scroll
+                {this.createFreezeTransactionContent()}
               </div>
             </div>
           </Tabs>
