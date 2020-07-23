@@ -23,7 +23,7 @@ const StyledContainer = styled(Container)`
 const tableStyle = {
   width: "100%",
   height: "80%",
-  marginBottom: "20px",
+  marginBottom: "10px",
 };
 
 const thStyle = {
@@ -47,6 +47,15 @@ export default class InfoContainer extends Component {
     this.deposit = this.deposit.bind(this);
     this.getKeys();
   }
+
+  //componentWillReceiveProps(props) {
+  //  if(this.props.drizzleState.accounts[0]){
+  //    if (props.drizzleState.accounts[0] !== this.props.drizzleState.accounts[0]) {
+  //      console.log(this.props.drizzleState.accounts[0]);
+  //      //this.getKeys();
+  //    }
+  //  }
+  //}
 
   setTransactionMode(mode) {
     //1 = einzahlen
@@ -110,6 +119,7 @@ export default class InfoContainer extends Component {
       value: transactionValue,
       from: drizzleState.accounts[0],
     });
+    this.getKeys();
   }
 
   withdraw(){
@@ -121,6 +131,8 @@ export default class InfoContainer extends Component {
     contract.methods["withdraw"].cacheSend(transactionValue, {
       from: drizzleState.accounts[0],
     });
+    this.getKeys();
+
   };
 
   getKeys() {

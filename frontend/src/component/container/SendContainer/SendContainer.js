@@ -136,7 +136,7 @@ export default class SendContainer extends Component {
               </StyledInnerContainer>
               <StyledButton type="button">bestätigen</StyledButton>
             </div>
-            <div label="Dauerauftrag ">
+            <div label="Dauerauftrag (bald verfügbar..)" disabled={true}>
               <StyledInnerContainer>
                 <div class="md-form md-outline input-with-post-icon datepicker">
                   <label for="example">Datum auswählen</label>

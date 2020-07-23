@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Container, Header, Divider, Content, Button } from "../Container";
-import { NAVIGATION_FREEZE_TEXT } from "../../../constants";
+import { Container, Header, Divider, Content } from "../Container";
+import { NAVIGATION_FREEZE_CONTRACT_TEXT } from "../../../constants";
+import { Form, Button } from "react-bootstrap";
 
-export default class FreezeContainer extends Component {
+export default class FreezeContractContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,15 +12,21 @@ export default class FreezeContainer extends Component {
     };
     this.submitFreezeTime = this.submitFreezeTime.bind(this);
     this.handleFreezeTimeChange = this.handleFreezeTimeChange.bind(this);
+    this.getNowFormatet = this.getNowFormatet.bind(this);
   }
 
   handleFreezeTimeChange(e) {
-    this.setState({ validFreezeTime: true });
     this.setState({ freezeTime: e.target.value });
+    if((e.target.value).length > 0) {
+      this.setState({validFreezeTime: true});
+    }else{
+      this.setState({validFreezeTime: false});
+    }
   }
 
   submitFreezeTime() {
     var selectedTime = new Date(this.state.freezeTime);
+    selectedTime = selectedTime - 1000 *(60*60*3);
     var now = new Date();
     var timeInSecondsToFreeze = Math.floor((selectedTime - now) / 1000);
     if (isNaN(timeInSecondsToFreeze)) {
@@ -37,7 +44,7 @@ export default class FreezeContainer extends Component {
     } else {
       alert(
         "Ihr Konto wird bis zum " +
-          new Date(selectedTime).toLocaleString() +
+          (new Date(selectedTime)).toLocaleString() +
           " gespert werden!"
       );
       this.sendFreezeTime(timeInSecondsToFreeze);
@@ -53,10 +60,32 @@ export default class FreezeContainer extends Component {
     });
   }
 
+  getNowFormatet(){
+    var today = new Date()
+    var tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    var dd = tomorrow.getDate();
+
+    var mm = tomorrow.getMonth()+1;
+    var yyyy = tomorrow.getFullYear();
+    if(dd<10)
+    {
+      dd='0'+dd;
+    }
+
+    if(mm<10)
+    {
+      mm='0'+mm;
+    }
+    tomorrow = yyyy + '-' + mm + '-' + dd;
+    return tomorrow;
+  }
+
   render() {
+    this.getNowFormatet();
     return (
       <Container>
-        <Header>{NAVIGATION_FREEZE_TEXT}</Header>
+        <Header>{NAVIGATION_FREEZE_CONTRACT_TEXT}</Header>
         <Divider />
         <Content>
           <div>
@@ -65,26 +94,39 @@ export default class FreezeContainer extends Component {
               <input
                 id="freezeTimePicker"
                 placeholder="Select date"
-                type="datetime-local"
+                type="date"
                 class="form-control"
+                min={this.getNowFormatet()}
                 value={this.state.freezeTime}
                 onChange={this.handleFreezeTimeChange}
               />
             </div>
             <div class="form-group" />
-          </div>
+          </div>{
+          <Button
+              style={{
+                position: "absolute",
+                width: "calc(100% - 40px)",
+                bottom: "10px",
+              }}
+              variant="outline-light"
+              disabled={!this.state.validFreezeTime}
+              onClick={this.submitFreezeTime}
+          >
+            Senden
+          </Button>/*
           <Button
             style={{
-              position: "absolute",
-              width: "calc(100% - 40px)",
-              height: "calc(10%)",
+y
             }}
             variant="outline-light"
             disabled={!this.state.validFreezeTime}
             onClick={this.submitFreezeTime}
           >
+
             Konto sperren
           </Button>
+          */}
         </Content>
       </Container>
     );

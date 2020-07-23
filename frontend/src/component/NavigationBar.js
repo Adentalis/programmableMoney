@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import { Nav, Navbar, NavDropdown} from 'react-bootstrap';
-import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_PATH, NAVIGATION_MESSAGE_TEXT, NAVIGATION_SEND_TEXT, NAVIGATION_FREEZE_TEXT} from '../constants';
+import { NAVIGATION_MESSAGE_PATH, NAVIGATION_SEND_PATH, NAVIGATION_FREEZE_MONEY_PATH,NAVIGATION_FREEZE_CONTRACT_PATH,  NAVIGATION_MESSAGE_TEXT, NAVIGATION_SEND_TEXT, NAVIGATION_FREEZE_MONEY_TEXT,NAVIGATION_FREEZE_CONTRACT_TEXT} from '../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -86,8 +86,10 @@ class NavigationBar extends Component {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_SEND_PATH}>{NAVIGATION_SEND_TEXT}</Link></Nav.Item>
-              <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_FREEZE_PATH}>{NAVIGATION_FREEZE_TEXT}</Link></Nav.Item>
+              <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_FREEZE_MONEY_PATH}>{NAVIGATION_FREEZE_MONEY_TEXT}</Link></Nav.Item>
+              <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_FREEZE_CONTRACT_PATH}>{NAVIGATION_FREEZE_CONTRACT_TEXT}</Link></Nav.Item>
               <Nav.Item><Link className="nav-link" to={"/" + NAVIGATION_MESSAGE_PATH}>{NAVIGATION_MESSAGE_TEXT}</Link></Nav.Item>
+
             </Nav>
             <Nav className="ml-auto">
               <NavDropdown.Divider />

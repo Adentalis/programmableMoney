@@ -47,6 +47,7 @@ class Tabs extends Component {
                 key={label}
                 label={label}
                 onClick={onClickTabItem}
+                disabled={this.props.disabled}
               />
             );
           })}

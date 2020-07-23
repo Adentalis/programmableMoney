@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import NavigationBar from "./component/NavigationBar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import FreezeContainer from "./component/container/FreezeContainer/FreezeContainer.js";
+import FreezeMoneyContainer from "./component/container/FreezeMoneyContainer/FreezeMoneyContainer.js";
+import FreezeContractContainer from "./component/container/FreezeContractContainer/FreezeContractContainer.js";
 import MessageContainer from "./component/container/MessageContainer/MessageContainer.js";
 import InfoContainer from "./component/container/InfoContainer/InfoContainer.js";
 import SendContainer from "./component/container/SendContainer/SendContainer.js";
@@ -67,10 +68,16 @@ class App extends Component {
                       drizzleState={this.state.drizzleState}
                     />
                   </Route>
-                  <Route path="/freeze" exact>
-                    <FreezeContainer
+                  <Route path="/freezemoney" exact>
+                    <FreezeMoneyContainer
                       drizzle={this.props.drizzle}
                       drizzleState={this.state.drizzleState}
+                    />
+                  </Route>
+                  <Route path="/freezecontract" exact>
+                    <FreezeContractContainer
+                        drizzle={this.props.drizzle}
+                        drizzleState={this.state.drizzleState}
                     />
                   </Route>
                 </Switch>
