@@ -8,19 +8,31 @@ export default class FreezeMoneyContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      freezeTime: "2020-07-25T00:00",
-      validFreezeTime: false,
+      freezeValue: null,
+      freezeValueInvalid: true,
+
+      freezeTime: null,
+      freezeTimeInvalid: true,
+
+      freezeMessage: null,
+      freezeMessageInvalid: true,
+
+      transactionValue: "",
+
       getFreezeTransactionKey: [],
     };
-    this.submitFreezeTime = this.submitFreezeTime.bind(this);
+    this.handleFreezeValueChange = this.handleFreezeValueChange.bind(this);
     this.handleFreezeTimeChange = this.handleFreezeTimeChange.bind(this);
-    this.getNowFormatet = this.getNowFormatet.bind(this);
+    this.handleFreezeMessageChange = this.handleFreezeMessageChange.bind(this);
 
+    this.submitFreezeTransaction = this.submitFreezeTransaction.bind(this);
+
+    this.getNowFormatet = this.getNowFormatet.bind(this);
+    this.sortFreezeTransactionsByReleaseDate = this.sortFreezeTransactionsByReleaseDate.bind(this);
     this.MAXIMUM_FREEZE_TRANSACTIONS = 5;
   }
 
   componentDidMount() {
-    /*
     const { drizzle } = this.props;
     const contract = drizzle.contracts.Bank;
 
@@ -30,51 +42,59 @@ export default class FreezeMoneyContainer extends Component {
       getFreezeTransactionKey[i] = contract.methods["getFreezeTransaction"].cacheCall(i);
     }
     this.setState({ getFreezeTransactionKey });
-    */
+  }
+
+  handleFreezeValueChange(e) {
+    this.setState({ freezeValue: e.target.value });
+    var newValue = e.target.value;
+    var validation = {
+      isNumber: function (str) {
+        var pattern = /^\d+$/;
+        return pattern.test(str); // returns a boolean
+      },
+    };
+    if (validation.isNumber(newValue)) {
+      this.setState({ freezeValueInvalid: false });
+    } else {
+      this.setState({ freezeValueInvalid: true });
+    }
   }
 
   handleFreezeTimeChange(e) {
     this.setState({ freezeTime: e.target.value });
     if((e.target.value).length > 0) {
-      this.setState({validFreezeTime: true});
+      this.setState({freezeTimeInvalid: false});
     }else{
-      this.setState({validFreezeTime: false});
+      this.setState({freezeTimeInvalid: true});
     }
   }
 
-  submitFreezeTime() {
+  handleFreezeMessageChange(e) {
+    this.setState({ freezeMessage: e.target.value });
+    if((e.target.value).length > 0) {
+      this.setState({freezeMessageInvalid: false});
+    }else{
+      this.setState({freezeMessageInvalid: true});
+    }
+  }
+
+  async sendFreezeTime(value, timeInSecondsToFreeze, message){
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.Bank;
+    contract.methods["createFreezeTranaction"].cacheSend(timeInSecondsToFreeze, value, message, {
+      from: drizzleState.accounts[0],
+    });
+  }
+
+  submitFreezeTransaction(){
     var selectedTime = new Date(this.state.freezeTime);
     var now = new Date();
     var timeInSecondsToFreeze = Math.floor((selectedTime - now) / 1000);
-    if (isNaN(timeInSecondsToFreeze)) {
-      alert("Bitte trage Sie ein gültiges Datum ein!");
-    } else if (timeInSecondsToFreeze < 0) {
-      alert(
-        "Ihr ausgewähltes Datum liegt in der Vergangenheit! Bitte ein zukünftiges Datum auswählen."
-      );
-    } else if (timeInSecondsToFreeze < 300) {
-      alert(
-        "Ihr ausgewähltes Datum liegt nur innerhalb von 5 Minuten in der Zukunft, und könnte somit eventuell nicht rechtzeitig bearbeitet werden!"
-      );
-      this.sendFreezeTime(timeInSecondsToFreeze);
 
-    } else {
-      alert(
-        "Ihr Konto wird bis zum " +
-          new Date(selectedTime).toLocaleString() +
-          " gespert werden!"
-      );
-      this.sendFreezeTime(timeInSecondsToFreeze);
-    }
-  }
-  
-  async sendFreezeTime(timeInSecondsToFreeze){
-    console.log(timeInSecondsToFreeze + " Sekunden zum einfrieren");
-    const { drizzle, drizzleState } = this.props;
-    const contract = drizzle.contracts.Bank;
-    contract.methods["createFreezeTranaction"].cacheSend(timeInSecondsToFreeze, {
-      from: drizzleState.accounts[0],
-    });
+    console.log("freeze - Value: " + this.state.freezeValue + " Time " + this.state.freezeTime + "(" + timeInSecondsToFreeze + ") Message" + this.state.freezeMessage);
+    this.sendFreezeTime(this.state.freezeValue, timeInSecondsToFreeze, this.state.freezeMessage);
+
+    this.setState({ freezeMessage: '', freezeMessageInvalid: true, freezeValue: '', freezeValueInvalid: true, freezeTime: '', freezeTimeInvalid: true });
   }
 
   getNowFormatet(){
@@ -98,9 +118,9 @@ export default class FreezeMoneyContainer extends Component {
     return tomorrow;
   }
 
-  sortOrdersByReleaseDate(orders) {
-    return orders.sort((orderA, orderB) => {
-      return orderA.value[2] - orderB.value[2];
+  sortFreezeTransactionsByReleaseDate(freezeTransactions) {
+    return freezeTransactions.sort((freezeTransactionA, freezeTransactionB) => {
+      return freezeTransactionA.value[2] - freezeTransactionB.value[2];
     });
   }
 
@@ -123,7 +143,7 @@ export default class FreezeMoneyContainer extends Component {
     let filledFreezeTransaction = allFreezeTransactions.filter(
         (freezeTransaction) => freezeTransaction.value[1] !== ""
     );
-    filledFreezeTransaction = this.sortOrdersByReleaseDate(filledFreezeTransaction);
+    filledFreezeTransaction = this.sortFreezeTransactionsByReleaseDate(filledFreezeTransaction);
 
     return filledFreezeTransaction.map((freezeTransaction, index) => (
         <div key={index}>
@@ -149,16 +169,18 @@ export default class FreezeMoneyContainer extends Component {
               <b>Freischaltdatum</b>
             </div>
             <div style={{ paddingLeft: "10px", width: "100%"}}>
-              {freezeTransaction.value[0]}
+              {new Date(
+                  1000 * parseInt(freezeTransaction.value[0]) + 3600000
+              ).toLocaleString()}
             </div>
           </div>
         </div>
     ));
   }
 
-  allFreezeTransactionsLoaded(orders) {
-    for (let i = 0; i < this.MAXIMUM_ORDERS; i++) {
-      if (orders[i] === undefined) return false;
+  allFreezeTransactionsLoaded(lastFreezeTransaction) {
+    for (let i = 0; i < this.MAXIMUM_FREEZE_TRANSACTIONS; i++) {
+      if (lastFreezeTransaction[i] === undefined) return false;
     }
     return true;
   }
@@ -178,8 +200,8 @@ export default class FreezeMoneyContainer extends Component {
                   type="text"
                   placeholder="100000000"
                   className="mr-sm-2"
-                  value={this.state.transactionValue}
-                  onChange={this.handleInputChange}
+                  value={this.state.freezeValue}
+                  onChange={this.handleFreezeValueChange}
               />
               <label>Bis wann möchten Sie diesen Betrag zurücklegen?</label>
               <input
@@ -197,8 +219,8 @@ export default class FreezeMoneyContainer extends Component {
                   type="text"
                   placeholder="Sparen für schlechte Zeiten"
                   className="mr-sm-2"
-                  value={this.state.transactionValue}
-                  onChange={this.handleInputChange}
+                  value={this.state.freezeMessage}
+                  onChange={this.handleFreezeMessageChange}
               />
               <Button
                   style={{
@@ -207,16 +229,15 @@ export default class FreezeMoneyContainer extends Component {
                     marginTop: "10px"
                   }}
                   variant="outline-light"
-                  disabled={!this.state.validFreezeTime}
-                  onClick={this.submitFreezeTime}
+                  disabled={this.state.freezeValueInvalid || this.state.freezeTimeInvalid || this.state.freezeMessageInvalid}
+                  onClick={this.submitFreezeTransaction}
               >
                 Zurücklegen
               </Button>
             </div>
             <div label="Zurückgelegte Beträge">
               <div style={{width: "calc(100% - 40px)", height: "calc(100% - 100px)", overflow: "auto", position: "absolute" }}>
-                Content to scroll
-                {/*this.createFreezeTransactionContent()*/}
+                {this.createFreezeTransactionContent()}
               </div>
             </div>
           </Tabs>
