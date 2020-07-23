@@ -32,7 +32,7 @@ const thStyle = {
 
 export default class InfoContainer extends Component {
   state = {
-    transactionMode: 1,
+    transactionMode: "1",
     transactionValue: "",
     transactionValueInvalid: true,
     ownBalanceDataKey: null,
@@ -51,7 +51,6 @@ export default class InfoContainer extends Component {
   setTransactionMode(mode) {
     //1 = einzahlen
     //2 = auszahlen
-
     this.setState({ transactionMode: mode });
   }
 
