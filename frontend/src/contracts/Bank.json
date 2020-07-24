@@ -20145,12 +20145,12 @@
         }
       },
       "links": {},
-      "address": "0xd611F1AF9D056f00F49CB036759De2753EfA82c2",
-      "transactionHash": "0x2c681f7b51624d101f2ed5d5740d44f63c173bc0b18e8245cd704b517c7cb67b"
+      "address": "0x83EE15DFDDD8b8AD56A73001Ca7A1627c7fe6716",
+      "transactionHash": "0xce68534fba19a47428b6998a3b710120721821520aa8ed5de03f7d91f1c8a062"
     }
   },
   "schemaVersion": "3.2.1",
-  "updatedAt": "2020-07-23T23:48:04.970Z",
+  "updatedAt": "2020-07-24T07:29:26.548Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
