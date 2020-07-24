@@ -1,5 +1,4 @@
 pragma solidity >=0.4.21 <0.7.0;
-//TODO uncomment 2 requires for live mode
 contract Bank {
     /*--------------------------------
             MONEY SECTION
@@ -105,7 +104,7 @@ contract Bank {
     ) public {
         require(allFreezedTransactionsOccupied() == false);
         require(balances[msg.sender] >= _value);
-        //require(_date > now);
+        require(_date > now);
         require(freezeContractEnd[msg.sender] <= now);
 
         balances[msg.sender] -= _value;
@@ -120,7 +119,7 @@ contract Bank {
 
     function finishFreezeTransaction(uint256 _index) public {
         require(freezeContractEnd[msg.sender] <= now);
-        //require(freezedTransactions[msg.sender][_index].date < now);
+        require(freezedTransactions[msg.sender][_index].date < now);
         balances[msg.sender] += freezedTransactions[msg.sender][_index].value;
         freezedTransactions[msg.sender][_index].value = 0;
         freezedTransactions[msg.sender][_index].date = 0;
