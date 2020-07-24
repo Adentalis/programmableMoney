@@ -115,7 +115,9 @@ export default class FreezeMoneyContainer extends Component {
   getNowFormatet() {
     var today = new Date();
     var tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    //tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setDate(tomorrow.getDate());
+
     var dd = tomorrow.getDate();
 
     var mm = tomorrow.getMonth() + 1;
@@ -271,7 +273,7 @@ export default class FreezeMoneyContainer extends Component {
                 placeholder="Select date"
                 type="date"
                 class="form-control"
-                //min={this.getNowFormatet()}
+                min={this.getNowFormatet()}
                 value={this.state.freezeTime}
                 onChange={this.handleFreezeTimeChange}
               />
