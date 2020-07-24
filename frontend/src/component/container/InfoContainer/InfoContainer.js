@@ -193,7 +193,7 @@ export default class InfoContainer extends Component {
               <tr>
                 <th style={thStyle}>Konto gesperrt bis:</th>
                 <td>
-                  {new Date(
+                  {(ownFreezeTime == 0) ? "-" : new Date(
                     1000 * parseInt(ownFreezeTime) + 3600000
                   ).toLocaleString()}
                 </td>
