@@ -193,7 +193,7 @@ export default class FreezeMoneyContainer extends Component {
               <b>Betrag</b>
             </div>
             <div style={{ paddingLeft: "10px", width: "100%" }}>
-              {freezeTransaction.value[1]}
+              {freezeTransaction.value[1]} wei
             </div>
           </div>
           <div>
@@ -215,7 +215,7 @@ export default class FreezeMoneyContainer extends Component {
         <div style={{ paddingLeft: "10px", width: "100%" }}>
           {new Date(
             1000 * parseInt(freezeTransaction.value[0]) - 3600000
-          ).toLocaleString()}
+          ).toLocaleString().slice(0, 9)}
         </div>
       );
     } else {
@@ -258,11 +258,11 @@ export default class FreezeMoneyContainer extends Component {
         <Content>
           <Tabs>
             <div label="Neu">
-              <label>Welchen Betrag möchten Sie zurücklegen?</label>
+              <label>Welchen Betrag möchten Sie zurücklegen? (wei)</label>
               <FormControl
                 style={{ width: "100%", marginBottom: "10px" }}
                 type="text"
-                placeholder="100000000"
+                placeholder="100000000 wei"
                 className="mr-sm-2"
                 value={this.state.freezeValue}
                 onChange={this.handleFreezeValueChange}

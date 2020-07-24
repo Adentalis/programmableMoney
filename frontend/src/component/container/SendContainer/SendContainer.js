@@ -94,7 +94,7 @@ export default class SendContainer extends Component {
                     value={this.state.txTargetAddress}
                     onChange={this.handleTxTargetChange}
                 />
-                <label>Betrag</label>
+                <label>Betrag (wei)</label>
                 <FormControl
                     style={{ width: "100%", marginBottom: "10px" }}
                     type="text"
